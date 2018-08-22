@@ -15,17 +15,19 @@ import os
 import environ
 
 ROOT_DIR = environ.Path(__file__) - 1
-print(ROOT_DIR)
 env = environ.Env()
 env_file = str(ROOT_DIR.path('.env'))
 env.read_env(env_file)
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-print(env.str('JOPLIN_PATH'))
+# if no joplin path is provided (to locate the database)
+# use the current folder
+JOPLIN_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)
+JOPLIN_PROFILE_PATH = env.str('JOPLIN_PROFILE_PATH')
 
+# path to the Joplin profile to find the joplin database
 DB_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
@@ -34,7 +36,8 @@ DB_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('SECRET_KEY', default='to be defined :P')
 # set to False when using in production
-DEBUG = env.bool('DEBUG', default=False),
+DEBUG = env.bool('DEBUG', default=True),
+
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
 # Application definition
@@ -83,14 +86,19 @@ WSGI_APPLICATION = 'joplin_web.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-print("db path ", DB_PATH)
+
 DATABASES = {
+    # joplin-web database
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'joplin_web.sqlite3'),
+    },
+    # joplin database
+    'joplin': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(DB_PATH, 'database.sqlite'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -129,3 +137,56 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format':
+                '%(asctime)s %(levelname)s %(module)s %(process)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR + '/joplin_web.log',
+            'maxBytes': 61280,
+            'backupCount': 3,
+            'formatter': 'verbose',
+
+        },
+    },
+    'loggers':
+        {
+            'django.request': {
+                'handlers': ['mail_admins', 'file'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+            'joplin_web.jw': {
+                'handlers': ['console', 'file'],
+                'level': 'DEBUG',
+            }
+        }
+}

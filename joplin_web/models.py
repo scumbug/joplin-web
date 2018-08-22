@@ -33,13 +33,13 @@ class DeletedItems(models.Model):
 class Folders(models.Model):
     id = models.TextField(primary_key=True, blank=True)
     title = models.TextField()
-    created_time = models.IntegerField()
-    updated_time = models.IntegerField()
-    user_created_time = models.IntegerField()
-    user_updated_time = models.IntegerField()
-    encryption_cipher_text = models.TextField()
-    encryption_applied = models.IntegerField()
-    parent_id = models.TextField()
+    created_time = models.IntegerField(blank=True)
+    updated_time = models.IntegerField(blank=True)
+    user_created_time = models.IntegerField(blank=True)
+    user_updated_time = models.IntegerField(blank=True)
+    encryption_cipher_text = models.TextField(blank=True)
+    encryption_applied = models.IntegerField(blank=True)
+    parent_id = models.TextField(blank=True)
 
     class Meta:
         managed = False
@@ -105,28 +105,28 @@ class NoteTags(models.Model):
 class Notes(models.Model):
     id = models.TextField(primary_key=True, blank=True)
     parent = models.ForeignKey("Folders", on_delete=models.CASCADE,)
-    # parent_id = models.TextField()
+    # parent_id = models.TextField()
     title = models.TextField()
     body = models.TextField()
-    created_time = models.IntegerField()
-    updated_time = models.IntegerField()
-    is_conflict = models.IntegerField()
-    latitude = models.TextField()  # This field type is a guess.
-    longitude = models.TextField()  # This field type is a guess.
-    altitude = models.TextField()  # This field type is a guess.
-    author = models.TextField()
-    source_url = models.TextField()
-    is_todo = models.IntegerField()
-    todo_due = models.IntegerField()
-    todo_completed = models.IntegerField()
-    source = models.TextField()
-    source_application = models.TextField()
-    application_data = models.TextField()
-    order = models.IntegerField()
-    user_created_time = models.IntegerField()
-    user_updated_time = models.IntegerField()
-    encryption_cipher_text = models.TextField()
-    encryption_applied = models.IntegerField()
+    created_time = models.IntegerField(blank=True)
+    updated_time = models.IntegerField(blank=True)
+    is_conflict = models.IntegerField(blank=True)
+    latitude = models.TextField(blank=True)  # This field type is a guess.
+    longitude = models.TextField(blank=True)  # This field type is a guess.
+    altitude = models.TextField(blank=True)  # This field type is a guess.
+    author = models.TextField(blank=True)
+    source_url = models.TextField(blank=True)
+    is_todo = models.IntegerField(blank=True)
+    todo_due = models.IntegerField(blank=True)
+    todo_completed = models.IntegerField(blank=True)
+    source = models.TextField(blank=True)
+    source_application = models.TextField(blank=True)
+    application_data = models.TextField(blank=True)
+    order = models.IntegerField(blank=True)
+    user_created_time = models.IntegerField(blank=True)
+    user_updated_time = models.IntegerField(blank=True)
+    encryption_cipher_text = models.TextField(blank=True)
+    encryption_applied = models.IntegerField(blank=True)
 
     class Meta:
         managed = False
@@ -191,12 +191,12 @@ class TableFields(models.Model):
 class Tags(models.Model):
     id = models.TextField(primary_key=True, blank=True)
     title = models.TextField()
-    created_time = models.IntegerField()
-    updated_time = models.IntegerField()
-    user_created_time = models.IntegerField()
-    user_updated_time = models.IntegerField()
-    encryption_cipher_text = models.TextField()
-    encryption_applied = models.IntegerField()
+    created_time = models.IntegerField(blank=True)
+    updated_time = models.IntegerField(blank=True)
+    user_created_time = models.IntegerField(blank=True)
+    user_updated_time = models.IntegerField(blank=True)
+    encryption_cipher_text = models.TextField(blank=True)
+    encryption_applied = models.IntegerField(blank=True)
 
     class Meta:
         managed = False

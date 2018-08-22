@@ -14,7 +14,7 @@ class NotesSerializer(serializers.ModelSerializer):
     parent = FoldersSerializer(read_only=True)
 
     parent_id = serializers.PrimaryKeyRelatedField(
-        queryset=Folders.objects.all(), source='folders', write_only=True)
+        queryset=Folders.objects.using('joplin').all(), source='folders', write_only=True)
 
     class Meta:
         fields = '__all__'
@@ -34,9 +34,9 @@ class NoteTagsSerializer(serializers.ModelSerializer):
     tag = TagsSerializer(read_only=True)
 
     note_id = serializers.PrimaryKeyRelatedField(
-        queryset=Notes.objects.all(), source='notes', write_only=True)
+        queryset=Notes.objects.using('joplin').all(), source='notes', write_only=True)
     tag_id = serializers.PrimaryKeyRelatedField(
-        queryset=Tags.objects.all(), source='tags', write_only=True)
+        queryset=Tags.objects.using('joplin').all(), source='tags', write_only=True)
 
     class Meta:
         fields = ('id', 'note_id', 'note', 'tag_id', 'tag', 'created_time',
