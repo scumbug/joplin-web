@@ -15,17 +15,14 @@ logger = getLogger("joplin_web.jw")
 
 class Command(BaseCommand):
 
-    help = 'Add a notebook to Joplin'
-
-    def add_arguments(self, parser):
-        parser.add_argument('notebook', type=str, help="notebook name")
+    help = 'Display the Joplin version'
 
     def handle(self, *args, **options):
         """
-            call the command to add a notebook
+            call the command to get the joplin version
         """
-        logger.info("launch joplin to make a notebook %s" % options['notebook'])
+        logger.info("launch joplin to get the version")
 
         joplin = Joplin()
-        out, err, exitcode = joplin.mkbook(options['notebook'])
+        out, err, exitcode = joplin.version()
         return out.decode()
