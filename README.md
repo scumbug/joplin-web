@@ -40,7 +40,7 @@ this will add the tables of django but will not change any joplin tables
 ### Running
 
 ```python
-python manage.py runserver &
+python manage.py runserver localhost:8001 &
 ```
 
 ### for frontend
@@ -53,4 +53,4 @@ Because it may happened we need to access to [Joplin](https://joplin.cozic.net/)
 
 ### Installationg
 
-see frontend/README.md file
+see `joplin-web/README.md` file

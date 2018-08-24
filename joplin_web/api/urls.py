@@ -14,6 +14,6 @@ router.register(r'notes_no_tags', NotesWoTagsViewSet, base_name='notes_no_tags')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url('^notes/folder/(?P<parent_id>.+)', NotesByFolderViewSet.as_view({'get': 'list'})),
+    url('^notes/folder/(?P<folder>.+)', NotesByFolderViewSet.as_view({'get': 'list'})),
     url('^notes/tag/(?P<tag_id>.+)', NotesByTagViewSet.as_view({'get': 'list'})),
 ]

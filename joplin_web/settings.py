@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'joplin_web',
 ]
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -191,3 +193,37 @@ LOGGING = {
             }
         }
 }
+
+
+#########################
+# CORS settings
+#########################
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'access-control-allow-headers',
+    'access-control-allow-origin ',
+    'cookiename',
+)
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8001',
+    'localhost:8000',
+    '127.0.0.1:8001',
+    '127.0.0.1:8000',
+    'localhost:8080',
+    '127.0.0.1:8080',
+)
+
+
+
+
+

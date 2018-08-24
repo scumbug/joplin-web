@@ -227,8 +227,8 @@ class NotesByFolderViewSet(viewsets.ModelViewSet):
     ordering = ('title',)
 
     def get_queryset(self):
-        parent_id = self.kwargs['parent_id']
-        return Notes.objects.using('joplin').filter(parent_id=parent_id)
+        folder = self.kwargs['folder']
+        return Notes.objects.using('joplin').filter(parent=folder)
 
 
 class NotesByTagViewSet(viewsets.ModelViewSet):
@@ -249,7 +249,7 @@ class NotesByTagViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         tag_id = self.kwargs['tag_id']
         # 1 - get all the note_id of the NoteTags models
-        inner_qs = NoteTags.objects.using('joplin').filter(tag_id=tag_id).values('note_id')
+        inner_qs = NoteTags.objects.using('joplin').filter(tag=tag_id).values('note_id')
         # 2 - get all the notes where the note id is in the previous NoteTags QuerySet
         return Notes.objects.using('joplin').filter(id__in=inner_qs)
 
