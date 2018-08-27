@@ -1,0 +1,54 @@
+<template>
+    <ul class="list-group">
+    <note v-for="note in this.getNotes" :key="note.id">
+        <li class="list-group-item"><a href="#" @click="editNote(note)">{{ note.title }}</a></li>
+    </note>
+    <button class="btn btn-success" @click="newNote()">Note</button>
+    </ul>
+</template>
+
+<script>
+// note content
+import Note from './Note.vue'
+
+import { createNamespacedHelpers } from 'vuex'
+
+import getters from '../getters'
+import actions from '../actions'
+import types from '../types'
+
+const namespace = 'notes'
+const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
+
+export default {
+  data () {
+    return {
+      // notes: [],
+      page: 1,
+      q: ''
+    }
+  },
+  components: { Note },
+  methods: {
+    editNote (note) {
+      this.$store.getters.getNoteById(note.id)
+    },
+    delNote (id) {
+      this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
+    },
+    searchNote () {
+    },
+    ...mapActions(Object.keys(actions))
+  },
+  mounted () {
+    this.q = ''
+  },
+  computed: {
+    ...mapGetters(Object.keys(getters))
+  },
+  created () {
+    this.$store.dispatch('notes/' + types.NOTE_FETCH_ALL)
+      .then(() => (this.loading = false))
+  }
+}
+</script>

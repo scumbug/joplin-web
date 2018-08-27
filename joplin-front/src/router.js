@@ -1,11 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Notes from './components/Notes.vue'
+
+import folders from './modules/folders'
+import notes from './modules/notes'
+import tags from './modules/tags'
+
 Vue.use(Router)
 
-export default new Router({
+export const router = new Router({
+  mode: 'history',
   routes: [
-    { path: '/notes/folder/:bookName', component: Notes, name: 'notesbybook', props: true },
-    { path: '/notes/tag/:tagName', component: Notes, name: 'notesbytag', props: true }
+    ...folders.routes,
+    ...notes.routes,
+    ...tags.routes
   ]
 })
+
+export default router
