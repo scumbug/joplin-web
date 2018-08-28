@@ -6,6 +6,18 @@ export const actions = {
     commit(types.NOTE_SET_ALL, await notesApi.fetchNotes())
   },
 
+  [types.NOTE_FETCH_TAG]: async ({ commit }, tag) => {
+    commit(types.NOTE_SET_ALL, await notesApi.fetchNotesByTag(tag))
+  },
+
+  [types.NOTE_FETCH_FOLDER]: async ({ commit }, folder) => {
+    commit(types.NOTE_SET_ALL, await notesApi.fetchNotesByFolder(folder))
+  },
+
+  [types.NOTE_SET]: async ({ commit }, note) => {
+    commit(types.NOTE_SET, note)
+  },
+
   [types.NOTE_CREATE]: async ({ commit }, note) => {
     commit(types.NOTE_APPEND, await notesApi.createNote(note))
   },

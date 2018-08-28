@@ -5,6 +5,8 @@ export const NOTE_CHANGE = 'NOTE_CHANGE'
 export const NOTE_REMOVE = 'NOTE_REMOVE'
 
 export const NOTE_FETCH_ALL = 'NOTE_FETCH_ALL'
+export const NOTE_FETCH_FOLDER = 'NOTE_FETCH_FOLDER'
+export const NOTE_FETCH_TAG = 'NOTE_FETCH_TAG'
 export const NOTE_CREATE = 'NOTE_CREATE'
 export const NOTE_DELETE = 'NOTE_DELETE'
 
@@ -16,5 +18,7 @@ export default {
   NOTE_REMOVE,
   NOTE_FETCH_ALL,
   NOTE_CREATE,
-  NOTE_DELETE
+  NOTE_DELETE,
+  NOTE_FETCH_FOLDER,
+  NOTE_FETCH_TAG
 }

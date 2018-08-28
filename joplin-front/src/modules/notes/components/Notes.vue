@@ -3,7 +3,6 @@
     <note v-for="note in this.getNotes" :key="note.id">
         <li class="list-group-item"><a href="#" @click="editNote(note)">{{ note.title }}</a></li>
     </note>
-    <button class="btn btn-success" @click="newNote()">Note</button>
     </ul>
 </template>
 
@@ -23,15 +22,12 @@ const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 export default {
   data () {
     return {
-      // notes: [],
-      page: 1,
-      q: ''
     }
   },
   components: { Note },
   methods: {
     editNote (note) {
-      this.$store.getters.getNoteById(note.id)
+      this.$store.dispatch('notes/' + types.NOTE_SET, note)
     },
     delNote (id) {
       this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
@@ -40,15 +36,11 @@ export default {
     },
     ...mapActions(Object.keys(actions))
   },
-  mounted () {
-    this.q = ''
-  },
   computed: {
     ...mapGetters(Object.keys(getters))
   },
   created () {
     this.$store.dispatch('notes/' + types.NOTE_FETCH_ALL)
-      .then(() => (this.loading = false))
   }
 }
 </script>

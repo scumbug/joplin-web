@@ -6,7 +6,8 @@ export const store = {
   namespaced: true,
 
   state: {
-    folders: []
+    note: {},
+    notes: []
   },
 
   mutations,

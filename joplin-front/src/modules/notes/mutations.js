@@ -5,6 +5,10 @@ export const mutations = {
     state.notes = notes
   },
 
+  [types.NOTE_SET]: (state, note) => {
+    state.note = note
+  },
+
   [types.NOTE_APPEND]: (state, note) => {
     state.note.push(note)
   },

@@ -10,6 +10,10 @@
         <li class="nav-item active">
         </li>
       </ul>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><button class="btn btn-success" @click="newNote()">Note</button></li>
+        <li class="nav-item">&nbsp;<button class="btn btn-success" @click="newFolder()">Book</button></li>
+      </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control  mr-sm-2" type="search" v-model="q" @keyup.enter="searchNote()" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -21,16 +25,23 @@
 
 <script>
 export default {
-  props: ['bookName'],
+  props: ['noteName', 'folderName'],
   data () {
     return {
       q: ''
     }
   },
   methods: {
+    newNote () {
+      // this.emit('newNote')
+    },
+    newFolder () {
+      // this.emit('newFolder')
+    },
     searchNote () {
-      this.$store.emit('searchNote', this.q)
+      // this.emit('searchNote', this.q)
     }
+
   }
 }
 </script>
