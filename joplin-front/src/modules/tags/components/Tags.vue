@@ -1,27 +1,23 @@
 <template>
-    <div>
-        <h3>Tags</h3>
-        <div class="articles">
-            <ul class="list-group">
-                <tag v-for="tag in this.getTags" :key="tag.id">
-                    <li class="list-group-item">
-                        <a href="#" @click="getNotesByTag(tag.id)">{{ tag.title }}</a>
-                    </li>
-                </tag>
-            </ul>
-        </div>
-    </div>
+  <div>
+    <ul class="list-group">
+    <tag v-for="tag in this.getTags" :key="tag.id">
+      <a href="#" @click="notesByTag(tag.id)">{{ tag.title }}</a><tags-counter v-bind:tag="tag.id"></tags-counter>
+    </tag>
+    </ul>
+  </div>
 </template>
 
 <script>
-import Tag from './Tag'
-
 import { createNamespacedHelpers } from 'vuex'
+
+import Tag from './Tag'
 
 import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
 import typesNote from '../../notes/types'
+import TagsCounter from './TagsCounter'
 
 const namespace = 'tags'
 const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
@@ -31,10 +27,10 @@ export default {
     return {
     }
   },
-  components: { Tag },
+  components: { Tag, TagsCounter },
   methods: {
     ...mapActions(Object.keys(actions)),
-    getNotesByTag (tag) {
+    notesByTag (tag) {
       this.$store.dispatch('notes/' + typesNote.NOTE_FETCH_TAG, tag)
     }
   },

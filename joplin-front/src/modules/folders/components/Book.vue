@@ -1,5 +1,5 @@
 <template>
-    <a class=""><slot></slot></a>
+    <li class="list-group-item"><slot></slot></li>
 </template>
 
 <script>

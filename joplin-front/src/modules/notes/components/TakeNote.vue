@@ -16,7 +16,7 @@
         <button v-if="note.id" class="btn btn-danger" @click="removeNote(note.id)">Delete this note ?</button>
       </div>
       <div class="form-group">
-        <vue-ckeditor v-model="note.body" :config="config" />
+        <textarea class="form-control" :value="note.body"></textarea>
         <span class="help is-danger" v-if="errors.has('body')" v-text="errors.getError('body')"></span>
       </div>
       <div class="form-group">
@@ -33,51 +33,15 @@ import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
 
-import VueCkeditor from 'vue-ckeditor2'
-
 const namespace = 'notes'
 const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 
 export default {
-  components: { VueCkeditor },
   data () {
     return {
       id: 0,
       folders: {},
-      errors: new Errors(),
-      config: {
-        toolbar: [
-          { name: 'document', items: [ 'Source', '-', 'Preview', 'Print', '-' ] },
-          { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
-          { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
-          '/',
-          { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
-          { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-          { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-          { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley' ] },
-          '/',
-          { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-          { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-          { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
-        ],
-        font_names: 'OpenDyslexic;Arial;Comic Sans MS;Courier New;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;',
-        height: '340px'
-      },
-      configs: {
-        spellChecker: false,
-        status: false,
-        initialValue: '',
-        renderingConfig: {
-          codeSyntaxHighlighting: true
-          // highlightingTheme: 'atom-one-light',
-        },
-        autofocus: true,
-        autosave: {
-          enabled: true,
-          uniqueId: 'OroUniqueID',
-          delay: 1000
-        }
-      }
+      errors: new Errors()
     }
   },
   methods: {

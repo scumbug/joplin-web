@@ -1,9 +1,12 @@
 <template>
+  <div>
     <ul class="list-group">
-    <note v-for="note in this.getNotes" :key="note.id">
-        <li class="list-group-item"><a href="#" @click="editNote(note)">{{ note.title }}</a></li>
-    </note>
+      <note v-for="note in this.getNotes" :key="note.id">
+      <a href="#" @click="editNote(note)">{{ note.title }}</a>
+      </note>
     </ul>
+  </div>
+
 </template>
 
 <script>

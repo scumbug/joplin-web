@@ -7,8 +7,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-        </li>
+        <li class="nav-item"><a class="nav-link" href="#" @click="getNotes()">Home</a></li>
       </ul>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><button class="btn btn-success" @click="newNote()">Note</button></li>
@@ -24,6 +23,10 @@
 </template>
 
 <script>
+import typesFolders from '../modules/folders/types'
+import typesNotes from '../modules/notes/types'
+import typesTags from '../modules/tags/types'
+
 export default {
   props: ['noteName', 'folderName'],
   data () {
@@ -40,8 +43,12 @@ export default {
     },
     searchNote () {
       // this.emit('searchNote', this.q)
+    },
+    getNotes () {
+      this.$store.dispatch('folders/' + typesFolders.FOLDER_FETCH_ALL)
+      this.$store.dispatch('notes/' + typesNotes.NOTE_FETCH_ALL)
+      this.$store.dispatch('tags/' + typesTags.TAG_FETCH_ALL)
     }
-
   }
 }
 </script>
