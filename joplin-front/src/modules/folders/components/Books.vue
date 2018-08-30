@@ -4,7 +4,7 @@
   <span class="help is-danger" v-if="errors.has('name')" v-text="errors.getError('name')"></span-->
   <ul class="list-group">
     <book v-for="book in this.getFolders" :key="book.id">
-      <a href="#" @click="notesByFolder(book.id)">{{ book.title }}</a><notes-counter v-bind:folder="book.id"></notes-counter>
+      <a href="#" @click="notesByFolder(book.id)">{{ book.title }}</a>&nbsp;<span class="badge badge-primary badge-pill">{{ book.nb_notes }}<slot></slot></span>
     </book>
   </ul>
   </div>
@@ -16,7 +16,6 @@ import { createNamespacedHelpers } from 'vuex'
 /* errors class */
 import Errors from '../../../core/Errors'
 import Book from './Book'
-import NotesCounter from '../../notes/components/NotesCounter'
 
 import getters from '../getters'
 import actions from '../actions'
@@ -34,7 +33,7 @@ export default {
       errors: new Errors()
     }
   },
-  components: { Book, NotesCounter },
+  components: { Book },
   methods: {
     /* create a folder */
     addFolder () {

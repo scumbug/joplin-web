@@ -1,4 +1,5 @@
 from django.core.management import call_command, CommandError
+from django.db.models import Q, Count
 
 from joplin_web.api.serializers import FoldersSerializer, NotesSerializer
 from joplin_web.api.serializers import TagsSerializer, NoteTagsSerializer
@@ -40,11 +41,13 @@ class FoldersViewSet(viewsets.ModelViewSet):
     queryset = Folders.objects.using('joplin').all()
     serializer_class = FoldersSerializer
     pagination_class = FoldersResultsSetPagination
-    # filter the folder
-    filter_backends = (filters.OrderingFilter,)
     permission_classes = (DjangoModelPermissions, )
     ordering_fields = ('title', )
     ordering = ('title',)
+
+    def get_queryset(self):
+        return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
+            .values('title', 'nb_notes', 'id', 'parent_id').order_by('title')
 
     def perform_create(self, serializer):
         # do not perform any serializer.save()
@@ -113,8 +116,6 @@ class NotesViewSet(viewsets.ModelViewSet):
     queryset = Notes.objects.using('joplin').all()
     serializer_class = NotesSerializer
     pagination_class = NotesResultsSetPagination
-    # filter the notes
-    filter_backends = (filters.OrderingFilter,)
     permission_classes = (DjangoModelPermissions, )
     ordering_fields = ('title', )
     ordering = ('title',)
@@ -278,11 +279,15 @@ class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tags.objects.using('joplin').all()
     serializer_class = TagsSerializer
     pagination_class = TagsResultsSetPagination
-    # filter the tags
-    filter_backends = (filters.OrderingFilter,)
     permission_classes = (DjangoModelPermissions, )
     ordering_fields = ('title', )
     ordering = ('title',)
+
+    def get_queryset(self):
+        return Tags.objects.using('joplin')\
+            .annotate(nb_notes=Count("notetags__note__id"))\
+            .values('title', 'nb_notes', 'id')\
+            .order_by('title')
 
     def perform_create(self, serializer):
         # do not perform any serializer.save()

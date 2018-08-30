@@ -4,6 +4,8 @@ from joplin_web.models import Folders, Notes, Tags, NoteTags
 
 class FoldersSerializer(serializers.ModelSerializer):
 
+    nb_notes = serializers.IntegerField(read_only=True)
+
     class Meta:
         fields = '__all__'
         model = Folders
@@ -12,9 +14,7 @@ class FoldersSerializer(serializers.ModelSerializer):
 class NotesSerializer(serializers.ModelSerializer):
 
     parent = FoldersSerializer(read_only=True)
-
-    parent_id = serializers.PrimaryKeyRelatedField(
-        queryset=Folders.objects.using('joplin').all(), source='folders', write_only=True)
+    parent_id = serializers.PrimaryKeyRelatedField(queryset=Folders.objects.using('joplin').all(), source='folders', write_only=True)
 
     class Meta:
         fields = '__all__'
@@ -22,6 +22,8 @@ class NotesSerializer(serializers.ModelSerializer):
 
 
 class TagsSerializer(serializers.ModelSerializer):
+
+    nb_notes = serializers.IntegerField()
 
     class Meta:
         fields = '__all__'

@@ -2,7 +2,7 @@
   <div>
     <ul class="list-group">
     <tag v-for="tag in this.getTags" :key="tag.id">
-      <a href="#" @click="notesByTag(tag.id)">{{ tag.title }}</a><tags-counter v-bind:tag="tag.id"></tags-counter>
+      <a href="#" @click="notesByTag(tag.id)">{{ tag.title }}</a>&nbsp;<span class="badge badge-primary badge-pill">{{ tag.nb_notes }}<slot></slot></span>
     </tag>
     </ul>
   </div>
@@ -17,7 +17,6 @@ import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
 import typesNote from '../../notes/types'
-import TagsCounter from './TagsCounter'
 
 const namespace = 'tags'
 const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
@@ -27,7 +26,7 @@ export default {
     return {
     }
   },
-  components: { Tag, TagsCounter },
+  components: { Tag },
   methods: {
     ...mapActions(Object.keys(actions)),
     notesByTag (tag) {

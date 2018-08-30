@@ -39,17 +39,17 @@ const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 export default {
   data () {
     return {
-      id: 0,
       folders: {},
       errors: new Errors()
     }
   },
   methods: {
     doNote () {
-      if (this.id === 0 || this.id === undefined) {
+      if (this.note.id === 0 || this.note.id === undefined) {
         this.addNote()
       } else {
-        this.updateNote(this.$data)
+        console.log(this.note)
+        this.updateNote()
       }
     },
     /* new note button pressed */
@@ -61,18 +61,19 @@ export default {
       let payload = {
         title: this.note.title,
         body: this.note.body,
-        parent: this.note.folder,
-        tag: this.note.tag
+        parent_id: this.note.folder,
+        tag_id: this.note.tag
       }
       this.$store.dispatch('notes/' + types.NOTE_CREATE, payload)
     },
     /* update the note */
-    updateNote (note) {
-      this.$store.dispatch('notes/' + types.NOTE_UPDATE, note)
+    updateNote () {
+      console.log(this.note)
+      this.$store.dispatch('notes/' + types.NOTE_CHANGE, this.note)
     },
     /* delete action pressed */
-    removeNote (id) {
-      this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
+    removeNote () {
+      this.$store.dispatch('notes/' + types.NOTE_REMOVE, this.note.id)
     },
     ...mapActions(Object.keys(actions))
   },
