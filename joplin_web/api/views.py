@@ -150,15 +150,13 @@ class NotesViewSet(viewsets.ModelViewSet):
         pass
 
     def update(self, request, *args, **kwargs):
-        # folder = Folders.objects.using('joplin').get(pk=request.data['parent_id'])
+        # folder = Folders.objects.using('joplin').get(pk=request.data['parent'])
         serializer = NotesSerializer(data=request.data)
-        super(NotesViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
             # call the joplin wrapper to create a note in a notebook
             message = call_command('editnote',
                                    request.data['id'],
-                                   # folder.title,
-                                   request.data['parent_id'],
+                                   request.data['parent'],
                                    request.data['title'],
                                    request.data['body'],
                                    request.data['is_todo'])
@@ -171,6 +169,9 @@ class NotesViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+    def get_queryset(self):
+        return Notes.objects.using('joplin')
 
 
 class NoteTagsViewSet(viewsets.ModelViewSet):

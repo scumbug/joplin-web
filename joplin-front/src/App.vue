@@ -14,10 +14,10 @@
             <h6>Tags</h6>
             <tags></tags>
           </div>
-          <div class="col-5">
+          <div class="col-3">
             <notes></notes>
           </div>
-          <div class="col-5">
+          <div class="col-7">
             <take-note></take-note>
           </div>
       </div>

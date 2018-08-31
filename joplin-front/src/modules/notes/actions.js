@@ -23,9 +23,11 @@ export const actions = {
   },
 
   [types.NOTE_CHANGE]: async ({ commit }, note) => {
-    commit(types.NOTE_APPEND, await notesApi.updateNote(note))
+    console.log('inside notes.components.actions types.NOTE_CHANGE ')
+    console.log(note)
+    commit(types.NOTE_CHANGE, await notesApi.updateNote(note))
   },
-  
+
   [types.NOTE_DELETE]: async ({ commit }, id) => {
     await notesApi.deleteNote(id)
     commit(types.NOTE_REMOVE, id)

@@ -16,6 +16,8 @@ export const mutations = {
   [types.NOTE_CHANGE]: (state, note) => {
     const el = state.notes.find(t => t.id === note.id)
     state.notes.splice(state.notes.indexOf(el), 1, note)
+    // empty the state of that note and so empty form
+    state.note = {}
   },
 
   [types.NOTE_REMOVE]: (state, id) => {

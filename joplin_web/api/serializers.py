@@ -14,7 +14,17 @@ class FoldersSerializer(serializers.ModelSerializer):
 class NotesSerializer(serializers.ModelSerializer):
 
     parent = FoldersSerializer(read_only=True)
-    parent_id = serializers.PrimaryKeyRelatedField(queryset=Folders.objects.using('joplin').all(), source='folders', write_only=True)
+    parent_id = serializers.PrimaryKeyRelatedField(queryset=Folders.objects.using('joplin').all(),
+                                                   source='folders',
+                                                   write_only=True)
+
+    def validate_title(self, value):
+        """
+        Check that the blog post is about Django.
+        """
+        if value == '':
+            raise serializers.ValidationError("Title is empty")
+        return value
 
     class Meta:
         fields = '__all__'

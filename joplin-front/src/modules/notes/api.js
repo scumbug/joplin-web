@@ -34,6 +34,7 @@ export function createNote (note) {
 
 export function updateNote (note) {
   return new Promise((resolve, reject) => {
+    console.log(note)
     axios.patch('http://127.0.0.1:8001/api/jw/notes/' + note.id + '/', note)
       .then((res) => { resolve(res.data.results) })
       .catch(error => { reject(error.statusText) })
