@@ -6,6 +6,10 @@ export const actions = {
     commit(types.TAG_SET_ALL, await tagsApi.fetchTags())
   },
 
+  [types.TAG_FETCH]: async ({ commit }, tag) => {
+    commit(types.TAG_SET, tag)
+  },
+
   [types.TAG_CREATE]: async ({ commit }, tag) => {
     commit(types.TAG_APPEND, await tagsApi.createTag(tag))
   },

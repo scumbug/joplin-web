@@ -5,6 +5,10 @@ export const mutations = {
     state.tags = tags
   },
 
+  [types.TAG_SET]: (state, tag) => {
+    state.tag = tag
+  },
+
   [types.TAG_APPEND]: (state, tag) => {
     state.tag.push(tag)
   },

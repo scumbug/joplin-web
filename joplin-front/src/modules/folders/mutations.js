@@ -5,6 +5,10 @@ export const mutations = {
     state.folders = folders
   },
 
+  [types.FOLDER_SET]: (state, folder) => {
+    state.folder = folder
+  },
+
   [types.FOLDER_APPEND]: (state, folder) => {
     state.folder.push(folder)
   },

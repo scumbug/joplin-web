@@ -7,11 +7,11 @@ export const actions = {
   },
 
   [types.NOTE_FETCH_TAG]: async ({ commit }, tag) => {
-    commit(types.NOTE_SET_ALL, await notesApi.fetchNotesByTag(tag))
+    commit(types.NOTE_SET_ALL, await notesApi.fetchNotesByTag(tag.id))
   },
 
   [types.NOTE_FETCH_FOLDER]: async ({ commit }, folder) => {
-    commit(types.NOTE_SET_ALL, await notesApi.fetchNotesByFolder(folder))
+    commit(types.NOTE_SET_ALL, await notesApi.fetchNotesByFolder(folder.id))
   },
 
   [types.NOTE_SET]: async ({ commit }, note) => {

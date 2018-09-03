@@ -2,9 +2,7 @@ export const getters = {
 
   getFolders: (state) => state.folders,
 
-  getFolderById: (state, getters) => (id) => getters.getFolders.filter(folder => folder.id === id),
-
-  getFoldersCount: (state, getters) => getters.getFolders.length
+  getFolderById: (state, getters) => (id) => getters.getFolders.filter(folder => folder.id === id)
 }
 
 export default getters

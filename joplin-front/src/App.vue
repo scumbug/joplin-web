@@ -9,9 +9,9 @@
       </div>
       <div class="row">
           <div class="col-2">
-            <h6>Books</h6>
+            <h5>Books</h5>
             <books></books>
-            <h6>Tags</h6>
+            <h5>Tags</h5>
             <tags></tags>
           </div>
           <div class="col-3">

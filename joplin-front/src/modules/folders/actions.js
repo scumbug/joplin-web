@@ -6,6 +6,10 @@ export const actions = {
     commit(types.FOLDER_SET_ALL, await foldersApi.fetchFolders())
   },
 
+  [types.FOLDER_FETCH]: async ({ commit }, folder) => {
+    commit(types.FOLDER_SET, folder)
+  },
+
   [types.FOLDER_CREATE]: async ({ commit }, folder) => {
     commit(types.FOLDER_APPEND, await foldersApi.createFolder(folder))
   },

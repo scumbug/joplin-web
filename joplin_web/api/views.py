@@ -22,15 +22,6 @@ logger = getLogger("joplin_web.jw")
 #
 ############
 
-
-class FoldersResultsSetPagination(PageNumberPagination):
-    """
-    pagination for folders
-    """
-    page_size = 20
-    max_page_size = 50
-
-
 class FoldersViewSet(viewsets.ModelViewSet):
     """
     Folders
@@ -40,7 +31,6 @@ class FoldersViewSet(viewsets.ModelViewSet):
     """
     queryset = Folders.objects.using('joplin').all()
     serializer_class = FoldersSerializer
-    pagination_class = FoldersResultsSetPagination
     permission_classes = (DjangoModelPermissions, )
     ordering_fields = ('title', )
     ordering = ('title',)
@@ -262,14 +252,6 @@ class NotesByTagViewSet(viewsets.ModelViewSet):
 ############
 
 
-class TagsResultsSetPagination(PageNumberPagination):
-    """
-    pagination for tags
-    """
-    page_size = 20
-    max_page_size = 50
-
-
 class TagsViewSet(viewsets.ModelViewSet):
     """
     Tags
@@ -279,7 +261,6 @@ class TagsViewSet(viewsets.ModelViewSet):
     """
     queryset = Tags.objects.using('joplin').all()
     serializer_class = TagsSerializer
-    pagination_class = TagsResultsSetPagination
     permission_classes = (DjangoModelPermissions, )
     ordering_fields = ('title', )
     ordering = ('title',)

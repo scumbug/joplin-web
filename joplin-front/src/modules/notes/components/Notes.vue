@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h5>{{this.title}}</h5>
     <ul class="list-group">
       <note v-for="note in this.getNotes" :key="note.id">
       <a href="#" @click="editNote(note)">{{ note.title }}</a>
@@ -40,7 +41,17 @@ export default {
     ...mapActions(Object.keys(actions))
   },
   computed: {
-    ...mapGetters(Object.keys(getters))
+    ...mapGetters(Object.keys(getters)),
+    title: {
+      get () {
+        if (this.$store.state.folders.folder.title !== undefined) {
+          return 'Notes > Folder > ' + this.$store.state.folders.folder.title
+        } else if (this.$store.state.tags.tag.title !== undefined) {
+          return 'Notes > Tag > ' + this.$store.state.tags.tag.title
+        }
+        return 'All notes'
+      }
+    }
   },
   created () {
     this.$store.dispatch('notes/' + types.NOTE_FETCH_ALL)
