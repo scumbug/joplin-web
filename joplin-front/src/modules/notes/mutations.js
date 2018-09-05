@@ -1,6 +1,25 @@
 import types from './types'
+// helper to map form fields mutations
+import { createHelpers } from 'vuex-map-fields'
+
+const { updateNoteField } = createHelpers({
+  mutationType: 'updateNoteField'
+})
 
 export const mutations = {
+  [types.NOTE_NEW]: (state, note) => {
+    state.note = {
+      id: 0,
+      title: '',
+      body: '',
+      parent: {
+        id: 0,
+        parent_id: 0
+      },
+      is_todo: 0
+    }
+  },
+
   [types.NOTE_SET_ALL]: (state, notes) => {
     state.notes = notes
   },
@@ -10,20 +29,29 @@ export const mutations = {
   },
 
   [types.NOTE_APPEND]: (state, note) => {
-    state.note.push(note)
+    state.notes.push(note)
   },
 
   [types.NOTE_CHANGE]: (state, note) => {
     const el = state.notes.find(t => t.id === note.id)
     state.notes.splice(state.notes.indexOf(el), 1, note)
-    // empty the state of that note and so empty form
-    state.note = {}
   },
 
   [types.NOTE_REMOVE]: (state, id) => {
-    const el = state.note.find(note => note.id === id)
-    state.note.splice(state.note.indexOf(el), 1)
-  }
+    const el = state.notes.find(note => note.id === id)
+    state.notes.splice(state.notes.indexOf(el), 1)
+    state.note = {
+      id: 0,
+      title: '',
+      body: '',
+      parent: {
+        id: 0,
+        parent_id: 0
+      },
+      is_todo: 0
+    }
+  },
+  updateNoteField
 }
 
 export default mutations

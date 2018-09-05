@@ -2,6 +2,10 @@ import notesApi from './api'
 import types from './types'
 
 export const actions = {
+  [types.NOTE_NEW]: async ({ commit }) => {
+    commit(types.NOTE_NEW)
+  },
+
   [types.NOTE_FETCH_ALL]: async ({ commit }) => {
     commit(types.NOTE_SET_ALL, await notesApi.fetchNotes())
   },
@@ -23,12 +27,10 @@ export const actions = {
   },
 
   [types.NOTE_CHANGE]: async ({ commit }, note) => {
-    console.log('inside notes.components.actions types.NOTE_CHANGE ')
-    console.log(note)
     commit(types.NOTE_CHANGE, await notesApi.updateNote(note))
   },
 
-  [types.NOTE_DELETE]: async ({ commit }, id) => {
+  [types.NOTE_REMOVE]: async ({ commit }, id) => {
     await notesApi.deleteNote(id)
     commit(types.NOTE_REMOVE, id)
   }

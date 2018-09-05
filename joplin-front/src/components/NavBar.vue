@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     newNote () {
-      // this.emit('newNote')
+      this.$store.dispatch('notes/' + typesNotes.NOTE_NEW)
     },
     newFolder () {
       // this.emit('newFolder')

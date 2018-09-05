@@ -20,7 +20,7 @@ class NotesSerializer(serializers.ModelSerializer):
 
     def validate_title(self, value):
         """
-        Check that the blog post is about Django.
+        Check that the title of the post is filled
         """
         if value == '':
             raise serializers.ValidationError("Title is empty")

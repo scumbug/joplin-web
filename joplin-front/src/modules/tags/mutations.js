@@ -19,8 +19,8 @@ export const mutations = {
   },
 
   [types.TAG_REMOVE]: (state, id) => {
-    const el = state.tag.find(tag => tag.id === id)
-    state.tag.splice(state.tag.indexOf(el), 1)
+    const el = state.tags.find(tag => tag.id === id)
+    state.tags.splice(state.tags.indexOf(el), 1)
   }
 }
 

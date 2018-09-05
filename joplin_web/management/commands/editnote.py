@@ -20,8 +20,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('note_id', type=str, help="id of the note")
         parser.add_argument('parent_id', type=str, help="id of the folder name")
-        parser.add_argument('body', type=str, help="body of the note")
         parser.add_argument('title', type=str, help="title of the note")
+        parser.add_argument('body', type=str, help="body of the note")
         parser.add_argument('is_todo', type=int, help="Todo boolean")
 
     def handle(self, *args, **options):

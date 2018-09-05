@@ -27,16 +27,15 @@ export function fetchNotesByTag (tag) {
 export function createNote (note) {
   return new Promise((resolve, reject) => {
     axios.post('http://127.0.0.1:8001/api/jw/notes/', note)
-      .then((res) => { resolve(res.data.results) })
+      .then((res) => { resolve(res.data) })
       .catch(error => { reject(error.statusText) })
   })
 }
 
 export function updateNote (note) {
   return new Promise((resolve, reject) => {
-    console.log(note)
     axios.patch('http://127.0.0.1:8001/api/jw/notes/' + note.id + '/', note)
-      .then((res) => { resolve(res.data.results) })
+      .then((res) => { resolve(res.data) })
       .catch(error => { reject(error.statusText) })
   })
 }
@@ -44,7 +43,7 @@ export function updateNote (note) {
 export function deleteNote (id) {
   return new Promise((resolve, reject) => {
     axios.delete('http://127.0.0.1:8001/api/jw/notes/' + id)
-      .then((res) => { resolve(res.data.results) })
+      .then((res) => { resolve(res.data) })
       .catch(error => { reject(error.statusText) })
   })
 }

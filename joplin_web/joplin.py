@@ -12,12 +12,12 @@ from django.conf import settings
 logger = getLogger("joplin_web.command")
 
 """
-    Joplin wrapper for joplin terminal command 
+    Joplin wrapper for joplin terminal command
     # run
     # 1) joplin use notebook to point on the notebook where to store the note
     # 2) joplin mknote will returned the note id of the created note
     # 3) joplin set note_id body xxx to add the body to the note
-    
+
     example:
     >>> joplin = Joplin()
     >>> joplin.mkbook('My Book')
@@ -83,7 +83,8 @@ class Joplin:
         line_start = 'set {note_id} '.format(note_id=note_id)
         for key in kwargs:
             line = line_start + ' {key} "{value}"'.format(key=key, value=kwargs.get(key))
-            logger.debug(line)
+            print("SET {}", line)
+            logger.debug("SET %s " % line)
             out, err, exitcode = self._run(line)
 
         return out, err, exitcode

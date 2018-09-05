@@ -19,8 +19,8 @@ export const mutations = {
   },
 
   [types.FOLDER_REMOVE]: (state, id) => {
-    const el = state.folder.find(folder => folder.id === id)
-    state.folder.splice(state.folder.indexOf(el), 1)
+    const el = state.folders.find(folder => folder.id === id)
+    state.folders.splice(state.folder.sindexOf(el), 1)
   }
 }
 

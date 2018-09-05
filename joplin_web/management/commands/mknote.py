@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 from __future__ import unicode_literals
-
+import json
 # django
 from django.core.management.base import BaseCommand
 from logging import getLogger
@@ -30,4 +30,13 @@ class Command(BaseCommand):
 
         joplin = Joplin()
         out, err, exitcode = joplin.mknote(options['notebook'], options['title'], options['body'])
-        return out.decode()
+
+        if exitcode == 0:
+            out, err, exitcode = joplin.ls(type_object='note')
+
+        msg = out.decode()
+
+        if exitcode == 1:
+            msg = "ERR: " + msg
+
+        return msg

@@ -9,6 +9,7 @@ export const NOTE_FETCH_FOLDER = 'NOTE_FETCH_FOLDER'
 export const NOTE_FETCH_TAG = 'NOTE_FETCH_TAG'
 export const NOTE_CREATE = 'NOTE_CREATE'
 export const NOTE_DELETE = 'NOTE_DELETE'
+export const NOTE_NEW = 'NOTE_NEW'
 
 export default {
   NOTE_SET_ALL,
@@ -20,5 +21,6 @@ export default {
   NOTE_CREATE,
   NOTE_DELETE,
   NOTE_FETCH_FOLDER,
-  NOTE_FETCH_TAG
+  NOTE_FETCH_TAG,
+  NOTE_NEW
 }
