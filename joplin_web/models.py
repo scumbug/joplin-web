@@ -199,7 +199,7 @@ class Tags(models.Model):
 
 
 class Version(models.Model):
-    version = models.IntegerField()
+    version = models.IntegerField(primary_key=True)
 
     class Meta:
         managed = False

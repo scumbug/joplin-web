@@ -1,10 +1,13 @@
 <template>
   <div>
-    <h5>{{this.title}}</h5>
+    <h5>{{ this.title }}</h5>
     <ul class="list-group">
-      <note v-for="note in this.getNotes" :key="note.id">
-      <a href="#" @click="editNote(note)">{{ note.title }}</a>
-      </note>
+      <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h6 class="mb-1">{{ note.title }}</h6>
+          <small className="text-muted">created: {{note.created_time}}</small>
+        </div>
+      </a>
     </ul>
   </div>
 
@@ -45,9 +48,9 @@ export default {
     title: {
       get () {
         if (this.$store.state.folders.folder.title !== undefined) {
-          return 'Notes > Folder > ' + this.$store.state.folders.folder.title
+          return 'From Book / ' + this.$store.state.folders.folder.title
         } else if (this.$store.state.tags.tag.title !== undefined) {
-          return 'Notes > Tag > ' + this.$store.state.tags.tag.title
+          return 'From Tag / ' + this.$store.state.tags.tag.title
         }
         return 'All notes'
       }

@@ -2,9 +2,9 @@ from django.core.management import call_command
 from django.db.models import Q, Count
 import json
 from joplin_web.api.serializers import FoldersSerializer, NotesSerializer
-from joplin_web.api.serializers import TagsSerializer, NoteTagsSerializer
+from joplin_web.api.serializers import TagsSerializer, NoteTagsSerializer, VersionSerializer
 from joplin_web.api.permissions import DjangoModelPermissions
-from joplin_web.models import Folders, Notes, Tags, NoteTags
+from joplin_web.models import Folders, Notes, Tags, NoteTags, Version
 
 from logging import getLogger
 
@@ -35,8 +35,19 @@ class FoldersViewSet(viewsets.ModelViewSet):
     ordering = ('title',)
 
     def get_queryset(self):
-        return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
-            .values('title', 'nb_notes', 'id', 'parent_id').order_by('title')
+        #return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
+        #    .values('title', 'nb_notes', 'id', 'parent_id').order_by('title')
+        return Folders.objects.using('joplin').raw('''
+         WITH RECURSIVE parent(n) AS (
+         SELECT folders.id FROM folders UNION SELECT title FROM folders, parent WHERE folders.parent_id=parent.n 
+         ) 
+         SELECT "folders"."title", "folders"."id", "folders"."parent_id", COUNT("notes"."id") AS "nb_notes" 
+         FROM "folders" 
+         LEFT OUTER JOIN "notes" ON ("folders"."id" = "notes"."parent_id")  
+         WHERE "folders"."id" IN parent 
+         GROUP BY "folders"."id", "folders"."title" 
+         ORDER BY "folders"."parent_id", "folders"."title" ASC        
+         ''')
 
     def perform_create(self, serializer):
         # do not perform any serializer.save()
@@ -281,3 +292,13 @@ class TagsViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class VersionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Joplin version
+
+    This viewset show the version
+    """
+    queryset = Version.objects.using('joplin').all()
+    serializer_class = VersionSerializer

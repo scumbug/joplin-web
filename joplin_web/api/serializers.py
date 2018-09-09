@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from joplin_web.models import Folders, Notes, Tags, NoteTags
+
+from joplin_web.models import Folders, Notes, Tags, NoteTags, Version
 
 
 class FoldersSerializer(serializers.ModelSerializer):
@@ -7,7 +8,7 @@ class FoldersSerializer(serializers.ModelSerializer):
     nb_notes = serializers.IntegerField(read_only=True)
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'title', 'parent_id', 'nb_notes', 'created_time')
         model = Folders
 
 
@@ -18,16 +19,8 @@ class NotesSerializer(serializers.ModelSerializer):
                                                    source='folders',
                                                    write_only=True)
 
-    def validate_title(self, value):
-        """
-        Check that the title of the post is filled
-        """
-        if value == '':
-            raise serializers.ValidationError("Title is empty")
-        return value
-
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'parent_id', 'parent', 'title', 'body', 'is_todo', 'created_time')
         model = Notes
 
 
@@ -55,3 +48,13 @@ class NoteTagsSerializer(serializers.ModelSerializer):
                   'updated_time', 'user_created_time', 'user_updated_time',
                   'encryption_cipher_text', 'encryption_applied')
         model = NoteTags
+
+
+class VersionSerializer(serializers.ModelSerializer):
+
+    version = serializers.IntegerField()
+
+    class Meta:
+        fields = ('version', )
+        read_only_fields = ('version', )
+        model = Version
