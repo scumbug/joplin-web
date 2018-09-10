@@ -20,7 +20,7 @@ class NotesSerializer(serializers.ModelSerializer):
                                                    write_only=True)
 
     class Meta:
-        fields = ('id', 'parent_id', 'parent', 'title', 'body', 'is_todo', 'created_time')
+        fields = ('id', 'parent_id', 'parent', 'title', 'body', 'is_todo', 'todo_due', 'created_time')
         model = Notes
 
 

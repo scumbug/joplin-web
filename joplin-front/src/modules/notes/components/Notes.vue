@@ -2,10 +2,22 @@
   <div>
     <h5>{{ this.title }}</h5>
     <ul class="list-group">
-      <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-          <h6 class="mb-1">{{ note.title }}</h6>
-          <small className="text-muted">created: {{note.created_time}}</small>
+      <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
+        <div v-if="note.is_todo==1" class="card text-success">
+          <p class="card-text">{{ note.title }}</p>
+          <p class="card-text">
+            <small class="text-muted">created: {{ note.created_time }}</small>
+            <small v-if="note.todo_due > 0" class="text-muted">| due: {{ note.todo_due }}</small>
+          </p>
+        </div>
+        <div v-else class="card">
+          <div class="card-body">
+            <p class="card-text">{{ note.title }}</p>
+            <p class="card-text">
+              <small class="text-muted">created: {{ note.created_time }}</small>
+              <small v-if="note.todo_due > 0" class="text-muted">| due: {{ note.todo_due }}</small>
+            </p>
+          </div>
         </div>
       </a>
     </ul>

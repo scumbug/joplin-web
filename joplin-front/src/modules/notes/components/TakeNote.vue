@@ -28,7 +28,7 @@
     </div>
     <div class="form-group row">
       <div class="col-sm-6">
-        <textarea class="form-control form-control-sm"rows="25" v-model="body" @input="updateBody"></textarea>
+        <textarea class="form-control form-control-sm" rows="25" v-model="body" @input="updateBody"></textarea>
         <span class="help is-danger" v-if="errors.has('body')" v-text="errors.getError('body')"></span><br/>
         <button class="btn btn-primary" :disabled="errors.any()">Save</button>
       </div>

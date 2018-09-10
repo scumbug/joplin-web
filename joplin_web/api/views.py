@@ -35,8 +35,9 @@ class FoldersViewSet(viewsets.ModelViewSet):
     ordering = ('title',)
 
     def get_queryset(self):
-        #return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
-        #    .values('title', 'nb_notes', 'id', 'parent_id').order_by('title')
+        return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
+            .values('title', 'nb_notes', 'id', 'parent_id').order_by('parent_id', 'title')
+        """
         return Folders.objects.using('joplin').raw('''
          WITH RECURSIVE parent(n) AS (
          SELECT folders.id FROM folders UNION SELECT title FROM folders, parent WHERE folders.parent_id=parent.n 
@@ -48,6 +49,7 @@ class FoldersViewSet(viewsets.ModelViewSet):
          GROUP BY "folders"."id", "folders"."title" 
          ORDER BY "folders"."parent_id", "folders"."title" ASC        
          ''')
+        """
 
     def perform_create(self, serializer):
         # do not perform any serializer.save()
@@ -106,6 +108,25 @@ class NotesResultsSetPagination(PageNumberPagination):
     max_page_size = 50
 
 
+class TasksViewSet(viewsets.ModelViewSet):
+    """
+    Tasks
+
+    This viewset provides `list`, `create`, `retrieve`, `update`
+    and `destroy` actions.
+    """
+    queryset = Notes.objects.using('joplin').all()
+    serializer_class = NotesSerializer
+    pagination_class = NotesResultsSetPagination
+    permission_classes = (DjangoModelPermissions, )
+    ordering_fields = ('title', )
+    ordering = ('title',)
+
+    def get_queryset(self):
+        return Notes.objects.using('joplin').filter(todo_completed=0,
+                                                    todo_due__gt=0).order_by('-is_todo', '-created_time', 'title')
+
+
 class NotesViewSet(viewsets.ModelViewSet):
     """
     Notes
@@ -119,6 +140,9 @@ class NotesViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
     ordering_fields = ('title', )
     ordering = ('title',)
+
+    def get_queryset(self):
+        return Notes.objects.using('joplin').filter(todo_completed=0).order_by('-created_time', 'title')
 
     def create(self, request, *args, **kwargs):
         folder = Folders.objects.using('joplin').get(pk=request.data['parent_id'])
