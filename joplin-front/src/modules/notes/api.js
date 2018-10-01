@@ -42,7 +42,7 @@ export function updateNote (note) {
 
 export function deleteNote (id) {
   return new Promise((resolve, reject) => {
-    axios.delete('http://127.0.0.1:8001/api/jw/notes/' + id)
+    axios.delete('http://127.0.0.1:8001/api/jw/notes/' + id + '/')
       .then((res) => { resolve(res.data) })
       .catch(error => { reject(error.statusText) })
   })

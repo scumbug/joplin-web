@@ -1,6 +1,7 @@
-from django.core.management import call_command
+from django.conf import settings
 from django.db.models import Q, Count
-import json
+
+from joplin_api import JoplinApi
 from joplin_web.api.serializers import FoldersSerializer, NotesSerializer
 from joplin_web.api.serializers import TagsSerializer, NoteTagsSerializer, VersionSerializer
 from joplin_web.api.permissions import DjangoModelPermissions
@@ -35,6 +36,7 @@ class FoldersViewSet(viewsets.ModelViewSet):
     ordering = ('title',)
 
     def get_queryset(self):
+        """
         return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
             .values('title', 'nb_notes', 'id', 'parent_id').order_by('parent_id', 'title')
         """
@@ -49,46 +51,29 @@ class FoldersViewSet(viewsets.ModelViewSet):
          GROUP BY "folders"."id", "folders"."title" 
          ORDER BY "folders"."parent_id", "folders"."title" ASC        
          ''')
-        """
-
-    def perform_create(self, serializer):
-        # do not perform any serializer.save()
-        # creating a folder will be done by call_command('mkbook')
-        pass
 
     def create(self, request, *args, **kwargs):
         serializer = FoldersSerializer(data=request.data)
         super(FoldersViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
-            # call the joplin wrapper to create a notebook
-            message = call_command('mkbook', request.data['title'])
-            # an error message
-            if len(message) > 0:
-                return Response({'status': message})
-            # all went fine
-            else:
-                return Response({'status': 'notebook created'})
+            joplin = JoplinApi.factory(api_type='Api', token=settings.JOPLIN_TOKEN)
+            res = joplin.create_note(request.data['title'])
+            if res.status_code == 200:
+                return Response({'status folder created'})
+            return Response({'status': 'folder not created {}'.format(res.status_code)})
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
-
-    def perform_update(self, serializer):
-        # do not perform any serializer.save()
-        # creating a note will be done by call_command('editbook')
-        pass
 
     def update(self, request, *args, **kwargs):
         serializer = FoldersSerializer(data=request.data)
         super(FoldersViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
-            # call the joplin wrapper to rename a notebook
-            message = call_command('editbook', request.data['id'])
-            # an error message
-            if len(message) > 0:
-                return Response({'status': message})
-            # all went fine
-            else:
-                return Response({'status': 'folder updated'})
+            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            res = joplin.update_note(request.data['title'])
+            if res.status_code == 200:
+                return Response({'status folder updated'})
+            return Response({'status': 'folder not updated {}'.format(res.status_code)})
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
@@ -104,7 +89,7 @@ class NotesResultsSetPagination(PageNumberPagination):
     """
     pagination for notes
     """
-    page_size = 20
+    page_size = 50
     max_page_size = 50
 
 
@@ -142,53 +127,40 @@ class NotesViewSet(viewsets.ModelViewSet):
     ordering = ('title',)
 
     def get_queryset(self):
-        return Notes.objects.using('joplin').filter(todo_completed=0).order_by('-created_time', 'title')
+        return Notes.objects.using('joplin').order_by('created_time', 'title')
 
     def create(self, request, *args, **kwargs):
-        folder = Folders.objects.using('joplin').get(pk=request.data['parent_id'])
-        logger.debug("folder where the note will be added %s" % folder.title)
-        logger.debug(request.data)
         serializer = NotesSerializer(data=request.data)
-        # super(NotesViewSet, self).create(request, *args, **kwargs)
-        logger.debug(serializer)
         if serializer.is_valid():
-            # call the joplin wrapper to add a note in a notebook
-            message = call_command('mknote', folder.title,
-                                   request.data['body'],
-                                   request.data['title'])
-            if message.startswith('ERR:'):
-                return Response({'status': message })
-            else:
-                # return the ID found in the stdout
-                for x in json.loads(message):
-                    return Response({'id': x.get('id')})
+            data = {'is_todo': request.data.get('is_todo', 0)}
+            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            res = joplin.create_note(title=request.data['title'],
+                                     body=request.data['body'],
+                                     parent_id=request.data['parent_id'],
+                                     kwargs=data)
+            if res.status_code == 200:
+                return Response({'status': 'note created'})
+            return Response({'status': 'note not created {}'.format(res.status_code)})
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
-        # folder = Folders.objects.using('joplin').get(pk=request.data['parent'])
-        # get the id for the command 'editnote'
         note_id = request.data['id']
         # drop the id to pass validator
         del (request.data['id'])
         serializer = NotesSerializer(data=request.data, partial=True)
         if serializer.is_valid():
-            logger.debug("serializer valid")
-            # call the joplin wrapper to update a note in a notebook
-            message = call_command('editnote',
-                                   note_id,
-                                   request.data['parent_id'],
-                                   request.data['title'],
-                                   request.data['body'],
-                                   request.data['is_todo'])
-            # an error message
-            logger.debug(message)
-            if len(message) > 0:
-                return Response({'status': message})
-            # all went fine
-            else:
+            data = {'is_todo': request.data.get('is_todo', 0)}
+            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            res = joplin.update_note(note_id=note_id,
+                                     parent_id=request.data['parent_id'],
+                                     title=request.data['title'],
+                                     body=request.data['body'],
+                                     kwargs=data)
+            if res.status_code == 200:
                 return Response({'status': 'note updated'})
+            return Response({'status': 'note not updated {}'.format(res.status_code)})
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
@@ -305,14 +277,13 @@ class TagsViewSet(viewsets.ModelViewSet):
         serializer = TagsSerializer(data=request.data)
         super(TagsViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
-            # call the joplin wrapper to create a note
-            message = call_command('tag', 'add', request.data['parent_id'], request.data['title'])
-            # an error message
-            if len(message) > 0:
-                return Response({'status': message})
-            # all went fine
-            else:
-                return Response({'status': 'note created'})
+            # call the joplin wrapper to create a tag
+            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            res = joplin.create_tags_notes(note_id=request.data['parent_id'],
+                                           tag=request.data['title'])
+            if res.status_code == 200:
+                return Response({'status': 'tag created'})
+            return Response({'status': 'tag not created {}'.format(res.status_code)})
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)

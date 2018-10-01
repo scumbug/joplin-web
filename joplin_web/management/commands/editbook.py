@@ -6,8 +6,8 @@ from __future__ import unicode_literals
 from django.core.management.base import BaseCommand
 from logging import getLogger
 
-# joplin_web
-from joplin_web.joplin import Joplin
+# joplin_api
+from joplin_api import JoplinCmdApi
 
 # create logger
 logger = getLogger("joplin_web.jw")
@@ -27,6 +27,6 @@ class Command(BaseCommand):
         """
         logger.info("launch joplin to rename the folder %s to %s" % (options['id'], options['name']))
 
-        joplin = Joplin()
+        joplin = JoplinCmdApi()
         out, err, exitcode = joplin.ren(options['id'], options['name'])
         return out.decode()

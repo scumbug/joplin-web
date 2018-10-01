@@ -6,8 +6,8 @@ import json
 from django.core.management.base import BaseCommand
 from logging import getLogger
 
-# joplin_web
-from joplin_web.joplin import Joplin
+# joplin_api
+from joplin_api import JoplinCmdApi
 
 # create logger
 logger = getLogger("joplin_web.jw")
@@ -28,7 +28,7 @@ class Command(BaseCommand):
         """
         logger.info("launch joplin to make a note in %s" % options['notebook'])
 
-        joplin = Joplin()
+        joplin = JoplinCmdApi()
         out, err, exitcode = joplin.mknote(options['notebook'], options['title'], options['body'])
 
         if exitcode == 0:

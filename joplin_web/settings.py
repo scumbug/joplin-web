@@ -27,6 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # use the current folder
 JOPLIN_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)
 JOPLIN_PROFILE_PATH = env.str('JOPLIN_PROFILE_PATH')
+JOPLIN_TOKEN = env.str('JOPLIN_TOKEN')
 
 # path to the Joplin profile to find the joplin database
 DB_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)

@@ -6,8 +6,8 @@ from __future__ import unicode_literals
 from django.core.management.base import BaseCommand
 from logging import getLogger
 
-# joplin_web
-from joplin_web.joplin import Joplin
+# joplin_api
+from joplin_api import JoplinCmdApi
 
 # create logger
 logger = getLogger("joplin_web.jw")
@@ -29,6 +29,6 @@ class Command(BaseCommand):
         logger.info("launch joplin to %s a tag %s to a note %s" %
                     (options['action'], options['tag'], options['note']))
 
-        joplin = Joplin()
+        joplin = JoplinCmdApi()
         out, err, exitcode = joplin.mknote(options['action'], options['tag'], options['note'])
         return out.decode()

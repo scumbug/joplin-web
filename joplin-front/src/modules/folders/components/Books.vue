@@ -11,7 +11,10 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
+import TreeMenu from './TreeMenu'
+
 import Book from './Book'
+import SubBook from './SubBook'
 
 import getters from '../getters'
 import actions from '../actions'
@@ -25,10 +28,10 @@ const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 export default {
   data () {
     return {
-      label: ''
+      selection: []
     }
   },
-  components: { Book },
+  components: { Book, SubBook, TreeMenu },
   methods: {
     notesByFolder (folder) {
       let tag = {}
