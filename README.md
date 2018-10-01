@@ -51,6 +51,6 @@ python manage.py runserver localhost:8001 &
 
 Because it may happened we need to access to [Joplin](https://joplin.cozic.net/) without having access to his/her smartphone or the Joplin Desktop, and a Web Application could to the trick at a given moment.
 
-### Installationg
+### Installation
 
 see `joplin-web/README.md` file
