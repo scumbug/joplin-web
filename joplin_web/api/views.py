@@ -56,7 +56,7 @@ class FoldersViewSet(viewsets.ModelViewSet):
         serializer = FoldersSerializer(data=request.data)
         super(FoldersViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
-            joplin = JoplinApi.factory(api_type='Api', token=settings.JOPLIN_TOKEN)
+            joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
             res = joplin.create_note(request.data['title'])
             if res.status_code == 200:
                 return Response({'status folder created'})
@@ -69,7 +69,7 @@ class FoldersViewSet(viewsets.ModelViewSet):
         serializer = FoldersSerializer(data=request.data)
         super(FoldersViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
-            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
             res = joplin.update_note(request.data['title'])
             if res.status_code == 200:
                 return Response({'status folder updated'})
@@ -133,7 +133,7 @@ class NotesViewSet(viewsets.ModelViewSet):
         serializer = NotesSerializer(data=request.data)
         if serializer.is_valid():
             data = {'is_todo': request.data.get('is_todo', 0)}
-            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
             res = joplin.create_note(title=request.data['title'],
                                      body=request.data['body'],
                                      parent_id=request.data['parent_id'],
@@ -152,7 +152,7 @@ class NotesViewSet(viewsets.ModelViewSet):
         serializer = NotesSerializer(data=request.data, partial=True)
         if serializer.is_valid():
             data = {'is_todo': request.data.get('is_todo', 0)}
-            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
             res = joplin.update_note(note_id=note_id,
                                      parent_id=request.data['parent_id'],
                                      title=request.data['title'],
@@ -278,7 +278,7 @@ class TagsViewSet(viewsets.ModelViewSet):
         super(TagsViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
             # call the joplin wrapper to create a tag
-            joplin = JoplinApi.factory('Api', token=settings.JOPLIN_TOKEN)
+            joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
             res = joplin.create_tags_notes(note_id=request.data['parent_id'],
                                            tag=request.data['title'])
             if res.status_code == 200:

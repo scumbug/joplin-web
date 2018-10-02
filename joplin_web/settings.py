@@ -28,6 +28,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JOPLIN_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)
 JOPLIN_PROFILE_PATH = env.str('JOPLIN_PROFILE_PATH')
 JOPLIN_TOKEN = env.str('JOPLIN_TOKEN')
+API_USE_JOPLIN_WEBCLIPPER = env.str('API_USE_JOPLIN_WEBCLIPPER')
+
+JOPLIN_API_TYPE = 'Api'
+if API_USE_JOPLIN_WEBCLIPPER is False:
+    JOPLIN_API_TYPE = 'CmdApi'
+
 
 # path to the Joplin profile to find the joplin database
 DB_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)
@@ -54,7 +60,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'joplin_web',
-    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -66,8 +71,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'joplin_web.urls'
 
@@ -226,19 +232,24 @@ CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:8080',
 )
 
-INTERNAL_IPS = ['127.0.0.1']
+if DEBUG:
+    # DJANGO DEBUG TOOLBAR
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.versions.VersionsPanel',
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.settings.SettingsPanel',
-    'debug_toolbar.panels.headers.HeadersPanel',
-    'debug_toolbar.panels.request.RequestPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-    'debug_toolbar.panels.templates.TemplatesPanel',
-    'debug_toolbar.panels.cache.CachePanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.logging.LoggingPanel',
-    'debug_toolbar.panels.redirects.RedirectsPanel',
-]
+    INTERNAL_IPS = ['127.0.0.1']
+
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]

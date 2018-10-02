@@ -1,18 +1,22 @@
-# joplin-web
+# Joplin Web : The BackEnd
 
-Web application for [Joplin](https://joplin.cozic.net/)
+A Web application for [Joplin](https://joplin.cozic.net/)
 
-## requirements
+## why that project ?
 
-### for backend
+Because it may happened we need to access to [Joplin](https://joplin.cozic.net/) without having access to his/her smartphone or the Joplin Desktop, and a Web Application could to the trick at a given moment.
 
-* [joplin-terminal](https://joplin.cozic.net/terminal/) will be used to manage the life of your notes with the cloud storage service
+## Requirements
+
+### For backend
 
 * Python >= 3.6
+* [Joplin-API](https://github.com/foxmask/joplin-api)
 * [Django Rest Framework](http://www.django-rest-framework.org/#installation)
 * django-environ
+* requests
 
-#### installation
+#### Installation
 
 ```python
 python3 -m venv joplin-web
@@ -27,7 +31,14 @@ pip install -r requirements.txt
 
 copy env.sample to .env
 
-then set the JOPLIN_PATH to the database
+then set : 
+
+* the `JOPLIN_PATH` to the database 
+* the `JOPLIN_TOKEN` you have in the Webclipper config page in Joplin
+
+
+If you plan to use joplin-terminal and not the WebClipper, in your `.env` file, set `API_USE_JOPLIN_WEBCLIPPER` to `False` then joplin-web will switch of API calls from Rest to command line.
+
 
 #### Database
 
@@ -43,14 +54,6 @@ this will add the tables of django but will not change any joplin tables
 python manage.py runserver localhost:8001 &
 ```
 
-### for frontend
+### For Frontend
 
-* [VueJS](https://vuejs.org) (Vuex, axios)
-
-## why that project ?
-
-Because it may happened we need to access to [Joplin](https://joplin.cozic.net/) without having access to his/her smartphone or the Joplin Desktop, and a Web Application could to the trick at a given moment.
-
-### Installation
-
-see `joplin-web/README.md` file
+see [`joplin-web/joplin-front/README.md`](joplin-front/README.md) file

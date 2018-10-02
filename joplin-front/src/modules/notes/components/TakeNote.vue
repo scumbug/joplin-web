@@ -71,7 +71,7 @@ export default {
   components: { },
   methods: {
     doNote () {
-      if (this.id === 0 || this.id === undefined) {
+      if (this.id === undefined || this.id === 0) {
         this.addNote()
       } else {
         this.updateNote()
@@ -90,6 +90,7 @@ export default {
     /* update the note */
     updateNote () {
       // payload
+      console.log(this.id)
       let payload = {
         'id': this.id,
         'title': this.title,

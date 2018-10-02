@@ -6,19 +6,20 @@ install_requires = [
     'djangorestframework==3.8.2',
     'Markdown==2.6.11',
     'django-environ==0.4.5',
+    'requests==2.19.1',
 ]
 
 setup(
     name='joplin_web',
     version=version,
-    description='Joplin Webapp',
+    description='Joplin Web',
     long_description=open('README.md').read(),
     author='FoxMaSk',
     maintainer='FoxMaSk',
-    author_email='foxmask@protonmail.com',
-    maintainer_email='foxmask@protonmail.com',
-    url='https://github.com/foxmask/joplin_web',
-    download_url="https://github.com/foxmask/joplin_web/archive/joplin_web-" + version + ".zip",
+    author_email='foxmask protonmail',
+    maintainer_email='foxmask protonmail',
+    url='https://github.com/foxmask/joplin-web',
+    download_url="https://github.com/foxmask/joplin-web/archive/joplin_web-" + version + ".zip",
     packages=find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',

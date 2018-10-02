@@ -11,10 +11,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
-import TreeMenu from './TreeMenu'
-
 import Book from './Book'
-import SubBook from './SubBook'
 
 import getters from '../getters'
 import actions from '../actions'
@@ -31,7 +28,7 @@ export default {
       selection: []
     }
   },
-  components: { Book, SubBook, TreeMenu },
+  components: { Book },
   methods: {
     notesByFolder (folder) {
       let tag = {}

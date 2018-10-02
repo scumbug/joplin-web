@@ -1,4 +1,8 @@
-# joplin-front
+# Joplin Web : The FrontEnd
+
+## Requirements 
+
+* [VueJS](https://vuejs.org) (Vuex, axios)
 
 ## Project setup
 ```
@@ -19,3 +23,8 @@ npm run build
 ```
 npm run lint
 ```
+
+
+## For BackEnd 
+
+see [`joplin-web/joplin_web/README.md`](../README.md) file
