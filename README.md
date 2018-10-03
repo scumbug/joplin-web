@@ -8,15 +8,13 @@ Because it may happened we need to access to [Joplin](https://joplin.cozic.net/)
 
 ## Requirements
 
-### For backend
-
 * Python >= 3.6
 * [Joplin-API](https://github.com/foxmask/joplin-api)
 * [Django Rest Framework](http://www.django-rest-framework.org/#installation)
 * django-environ
 * requests
 
-#### Installation
+## Installation 
 
 ```python
 python3 -m venv joplin-web
@@ -27,7 +25,7 @@ cd joplin-web
 pip install -r requirements.txt
 ```
 
-#### settings 
+### settings 
 
 copy env.sample to .env
 
@@ -54,6 +52,6 @@ this will add the tables of django but will not change any joplin tables
 python manage.py runserver localhost:8001 &
 ```
 
-### For Frontend
+# Joplin-front : The Frontend
 
 see [`joplin-web/joplin-front/README.md`](joplin-front/README.md) file
