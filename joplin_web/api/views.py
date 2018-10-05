@@ -89,8 +89,8 @@ class NotesResultsSetPagination(PageNumberPagination):
     """
     pagination for notes
     """
-    page_size = 50
-    max_page_size = 50
+    page_size = 20
+    max_page_size = 20
 
 
 class TasksViewSet(viewsets.ModelViewSet):

@@ -7,8 +7,8 @@
           <div class="card-body">
             <p class="card-text">{{ note.title }}</p>
             <p class="card-text">
-              <small class="text-muted">created: {{ note.created_time }}</small>
-              <small v-if="note.todo_due > 0" class="text-muted">| due: {{ note.todo_due }}</small>
+              <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+              <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
             </p>
           </div>
         </div>
@@ -16,8 +16,8 @@
           <div class="card-body">
             <p class="card-text">{{ note.title }}</p>
             <p class="card-text">
-              <small class="text-muted">created: {{ note.created_time }}</small>
-              <small v-if="note.todo_due > 0" class="text-muted">| due: {{ note.todo_due }}</small>
+              <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+              <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
             </p>
           </div>
         </div>

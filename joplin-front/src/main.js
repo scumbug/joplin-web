@@ -8,10 +8,14 @@ import VueAxios from 'vue-axios'
 // https://github.com/vuejs/vue-router/
 import VueRouter from 'vue-router'
 
+import moment from 'moment'
+
 import router from './router'
 import store from './store'
 
 import App from './App.vue'
+
+Vue.prototype.moment = moment
 
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
