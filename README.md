@@ -55,3 +55,5 @@ python manage.py runserver localhost:8001 &
 # Joplin-front : The Frontend
 
 see [`joplin-web/joplin-front/README.md`](joplin-front/README.md) file
+
+![Joplin web](https://raw.githubusercontent.com/foxmask/joplin-web/master/joplin_web.png)
