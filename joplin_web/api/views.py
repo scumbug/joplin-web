@@ -54,10 +54,9 @@ class FoldersViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = FoldersSerializer(data=request.data)
-        super(FoldersViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
             joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
-            res = joplin.create_note(request.data['title'])
+            res = joplin.create_folder(request.data['title'])
             if res.status_code == 200:
                 return Response({'status folder created'})
             return Response({'status': 'folder not created {}'.format(res.status_code)})
@@ -67,10 +66,9 @@ class FoldersViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         serializer = FoldersSerializer(data=request.data)
-        super(FoldersViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
             joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
-            res = joplin.update_note(request.data['title'])
+            res = joplin.update_folder( request.data['id'], request.data['title'])
             if res.status_code == 200:
                 return Response({'status folder updated'})
             return Response({'status': 'folder not updated {}'.format(res.status_code)})
@@ -274,13 +272,12 @@ class TagsViewSet(viewsets.ModelViewSet):
             .order_by('title')
 
     def create(self, request, *args, **kwargs):
+        request.data['nb_notes'] = 0
         serializer = TagsSerializer(data=request.data)
-        super(TagsViewSet, self).create(request, *args, **kwargs)
         if serializer.is_valid():
             # call the joplin wrapper to create a tag
             joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
-            res = joplin.create_tags_notes(note_id=request.data['parent_id'],
-                                           tag=request.data['title'])
+            res = joplin.create_tag(title=request.data['title'])
             if res.status_code == 200:
                 return Response({'status': 'tag created'})
             return Response({'status': 'tag not created {}'.format(res.status_code)})

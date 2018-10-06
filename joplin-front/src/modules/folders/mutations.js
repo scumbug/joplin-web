@@ -18,7 +18,7 @@ export const mutations = {
   },
 
   [types.FOLDER_APPEND]: (state, folder) => {
-    state.folder.push(folder)
+    state.folders.push(folder)
   },
 
   [types.FOLDER_CHANGE]: (state, folder) => {

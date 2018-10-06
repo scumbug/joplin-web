@@ -9,10 +9,6 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link" href="#" @click="getNotes()">Home</a></li>
       </ul>
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><button class="btn btn-success" @click="newNote()">Note</button></li>
-        <li class="nav-item">&nbsp;<button class="btn btn-success" @click="newFolder()">Book</button></li>
-      </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control  mr-sm-2" type="search" v-model="q" @keyup.enter="searchNote()" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -28,19 +24,12 @@ import typesNotes from '../modules/notes/types'
 import typesTags from '../modules/tags/types'
 
 export default {
-  props: ['noteName', 'folderName'],
   data () {
     return {
       q: ''
     }
   },
   methods: {
-    newNote () {
-      this.$store.dispatch('notes/' + typesNotes.NOTE_NEW)
-    },
-    newFolder () {
-      // this.emit('newFolder')
-    },
     searchNote () {
       // this.emit('searchNote', this.q)
     },

@@ -10,7 +10,7 @@ export const mutations = {
   },
 
   [types.TAG_APPEND]: (state, tag) => {
-    state.tag.push(tag)
+    state.tags.push(tag)
   },
 
   [types.TAG_CHANGE]: (state, tag) => {

@@ -30,7 +30,10 @@
       <div class="col-sm-6">
         <textarea class="form-control form-control-sm" rows="25" v-model="body" @input="updateBody"></textarea>
         <span class="help is-danger" v-if="errors.has('body')" v-text="errors.getError('body')"></span><br/>
-        <button class="btn btn-primary" :disabled="errors.any()">Save</button>
+        <button class="btn btn-primary" :disabled="errors.any()">
+          <span v-if="id">Edit</span>
+          <span v-else>Create</span>
+        </button>
       </div>
       <div class="col-sm-6">
         <div v-html="compiledMarkdown"></div>
@@ -47,7 +50,6 @@ import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
 
-// import { mapFields } from 'vuex-map-fields'
 import { createHelpers } from 'vuex-map-fields'
 
 import _ from 'lodash'
