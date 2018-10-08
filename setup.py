@@ -14,6 +14,7 @@ setup(
     version=version,
     description='Joplin Web',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',  # This is important!
     author='FoxMaSk',
     maintainer='FoxMaSk',
     author_email='foxmask protonmail',

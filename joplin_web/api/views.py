@@ -130,8 +130,10 @@ class NotesViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = NotesSerializer(data=request.data)
         if serializer.is_valid():
-            data = {'is_todo': request.data.get('is_todo', 0)}
+            data = {'is_todo': request.data.get('is_todo', 0),
+                    'tags': request.data.get('tags', '')}
             joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
+
             res = joplin.create_note(title=request.data['title'],
                                      body=request.data['body'],
                                      parent_id=request.data['parent_id'],
@@ -149,7 +151,8 @@ class NotesViewSet(viewsets.ModelViewSet):
         del (request.data['id'])
         serializer = NotesSerializer(data=request.data, partial=True)
         if serializer.is_valid():
-            data = {'is_todo': request.data.get('is_todo', 0)}
+            data = {'is_todo': request.data.get('is_todo', 0),
+                    'tags': request.data.get('tags', '')}
             joplin = JoplinApi.factory(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
             res = joplin.update_note(note_id=note_id,
                                      parent_id=request.data['parent_id'],
