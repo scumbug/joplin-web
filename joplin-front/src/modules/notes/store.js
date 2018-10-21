@@ -14,7 +14,10 @@ export const store = {
         id: 0,
         parent_id: 0
       },
-      is_todo: 0
+      is_todo: 0,
+      todo_due: 0,
+      todo_completed: 0,
+      source_url: ''
     },
     notes: []
   },
