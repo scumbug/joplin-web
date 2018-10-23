@@ -6,6 +6,10 @@ export const actions = {
     commit(types.NOTE_NEW)
   },
 
+  [types.NOTE_FETCH_PAGE]: async ({ commit }, notes) => {
+    commit(types.NOTE_SET_ALL, notes)
+  },
+
   [types.NOTE_FETCH_ALL]: async ({ commit }) => {
     commit(types.NOTE_SET_ALL, await notesApi.fetchNotes())
   },

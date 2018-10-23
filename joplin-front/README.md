@@ -2,7 +2,13 @@
 
 ## Requirements 
 
-* [VueJS](https://vuejs.org)2 with Vuex, axios, marked, js-cookie
+* [VueJS](https://vuejs.org)2 with :
+  * Vuex
+  * vuex-map-fields
+  * axios
+  * marked
+  * js-cookie
+  * vue-infinite-loading
 
 ## Project setup
 ```

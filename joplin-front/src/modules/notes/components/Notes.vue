@@ -57,10 +57,16 @@
         </ul>
       </div>
     </div>
+    <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
+        <span slot="no-results">no notes found</span>
+        <span slot="no-more">no more notes</span>
+    </infinite-loading>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import InfiniteLoading from 'vue-infinite-loading'
 // note content
 import Note from './Note.vue'
 import Task from './Task.vue'
@@ -77,10 +83,43 @@ const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 export default {
   data () {
     return {
+      page: 0
     }
   },
-  components: { Note, Task },
+  components: { Note, Task, InfiniteLoading },
   methods: {
+    infiniteHandler ($state) {
+      let params = {}
+      // params.notebook = this.$store.state.folders.folder.title
+
+      if ((this.$store.state.notes.notes.length / 20) > 0) {
+        this.page = (this.$store.state.notes.notes.length / 20) + 1
+      }
+      if (this.page > 0) {
+        params.page = this.page
+      }
+      /*
+      if (this.q !== '') {
+        params.q = this.q
+        params.page = this.page
+      }
+      */
+      axios.get('http://127.0.0.1:8001/api/jw/notes/', {
+        params: params
+      }).then((res) => {
+        if (res.data.count > 0) {
+          let notes = this.$store.state.notes.notes.concat(res.data.results)
+          this.$store.dispatch('notes/' + types.NOTE_FETCH_PAGE, notes)
+          // notes = this.$store.state.notes.notes.concat(res.data.results)
+          $state.loaded()
+          if (this.$store.state.notes.notes.count / 20 === 10) {
+            $state.complete()
+          }
+        } else {
+          $state.complete()
+        }
+      })
+    },
     editNote (note) {
       this.$store.dispatch('notes/' + types.NOTE_SET, note)
     },
@@ -113,8 +152,13 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+    })
+  },
   created () {
-    this.$store.dispatch('notes/' + types.NOTE_FETCH_ALL)
+    // this.$store.dispatch('notes/' + types.NOTE_FETCH_ALL)
   }
 }
 </script>
