@@ -17,7 +17,15 @@ export const store = {
       is_todo: 0,
       todo_due: 0,
       todo_completed: 0,
-      source_url: ''
+      created_time: 0,
+      updated_time: 0,
+      source_url: '',
+      author: '',
+      latitude: 0,
+      longitude: 0,
+      altitude: 0,
+      source: '',
+      source_application: ''
     },
     notes: []
   },

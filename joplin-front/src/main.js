@@ -7,6 +7,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 // https://github.com/vuejs/vue-router/
 import VueRouter from 'vue-router'
+// https://github.com/bootstrap-vue/bootstrap-vue
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import moment from 'moment'
 
@@ -19,6 +23,7 @@ Vue.prototype.moment = moment
 
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
+Vue.use(BootstrapVue)
 
 window.Cookies = require('js-cookie')
 // eslint-disable-next-line

@@ -1,50 +1,33 @@
 <template>
   <div>
-    <h5>{{ this.title }}</h5>
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" href="#notes" data-toggle="tab" role="tab">Notes</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#tasks" data-toggle="tab" role="tab">Tasks</a>
-      </li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="notes" role="tabpanel">
-        <ul class="list-group">
+    <h5 v-html="this.title"></h5>
+    <b-tabs>
+      <b-tab title="notes" active>
+        <b-list-group>
           <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
-            <div v-if="note.todo_completed == 1" class="card text-success">
-              <div class="card-body">
-                <p class="card-text">{{ note.title }}</p>
-                <p class="card-text">
-                  <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
-                  <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
-                </p>
-              </div>
-            </div>
-            <div v-else-if="note.is_todo == 1 && note.todo_due > 0" class="card text-warning">
-              <div class="card-body">
-                <p class="card-text">{{ note.title }}</p>
-                <p class="card-text">
-                  <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
-                  <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
-                </p>
-              </div>
-            </div>
-            <div v-else class="card">
-              <div class="card-body">
-                <p class="card-text">{{ note.title }}</p>
-                <p class="card-text">
-                  <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
-                  <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
-                </p>
-              </div>
-            </div>
+            <b-card :title="note.title" v-if="note.todo_completed == 1" border-variant="success">
+              <p class="card-text">
+                <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+                <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
+              </p>
+            </b-card>
+            <b-card :title="note.title" v-else-if="note.is_todo == 1 && note.todo_due > 0" border-variant="warning">
+              <p class="card-text">
+                <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+                <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
+              </p>
+            </b-card>
+            <b-card :title="note.title" v-else>
+              <p class="card-text">
+                <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+                <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
+              </p>
+            </b-card>
           </a>
-        </ul>
-      </div>
-      <div class="tab-pane fade" id="tasks" role="tabpanel">
-        <ul class="list-group">
+        </b-list-group>
+      </b-tab>
+      <b-tab title="tasks">
+        <b-list-group>
           <a v-for="note in this.getTasks" :key="note.id" href="#" @click="editNote(note)">
             <Task v-bind:note='note'/>
           </a>
@@ -54,12 +37,12 @@
           <a v-for="note in this.getTasksCompleted" :key="note.id" href="#" @click="editNote(note)">
             <Task v-bind:note='note'/>
           </a>
-        </ul>
-      </div>
-    </div>
+        </b-list-group>
+      </b-tab>
+    </b-tabs>
     <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
-        <span slot="no-results">no notes found</span>
-        <span slot="no-more">no more notes</span>
+        <span slot="no-more">No more message</span>
+        <span slot="no-results">No results message</span>
     </infinite-loading>
   </div>
 </template>
@@ -90,6 +73,7 @@ export default {
   methods: {
     infiniteHandler ($state) {
       let params = {}
+      let pageSize = 20
       // params.notebook = this.$store.state.folders.folder.title
 
       if ((this.$store.state.notes.notes.length / 20) > 0) {
@@ -108,11 +92,12 @@ export default {
         params: params
       }).then((res) => {
         if (res.data.count > 0) {
+          // concat the result from the backend with the store
           let notes = this.$store.state.notes.notes.concat(res.data.results)
+          // update the store
           this.$store.dispatch('notes/' + types.NOTE_FETCH_PAGE, notes)
-          // notes = this.$store.state.notes.notes.concat(res.data.results)
           $state.loaded()
-          if (this.$store.state.notes.notes.count / 20 === 10) {
+          if (notes.count / pageSize === 10) {
             $state.complete()
           }
         } else {
@@ -127,6 +112,7 @@ export default {
       this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
     },
     searchNote () {
+      // @TODO
     },
     ...mapActions(Object.keys(actions))
   },
@@ -144,9 +130,9 @@ export default {
     title: {
       get () {
         if (this.$store.state.folders.folder.title !== undefined) {
-          return 'From Book / ' + this.$store.state.folders.folder.title
+          return '<i class="fas fa-folder-open"></i> From Book / ' + this.$store.state.folders.folder.title
         } else if (this.$store.state.tags.tag.title !== undefined) {
-          return 'From Tag / ' + this.$store.state.tags.tag.title
+          return '<i class="fas fa-tags"></i> From Tag / ' + this.$store.state.tags.tag.title
         }
         return 'All notes'
       }
@@ -158,6 +144,7 @@ export default {
     })
   },
   created () {
+    // duplicate data with infiniteHandler function
     // this.$store.dispatch('notes/' + types.NOTE_FETCH_ALL)
   }
 }

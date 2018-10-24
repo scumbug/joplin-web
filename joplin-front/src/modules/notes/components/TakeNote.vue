@@ -1,38 +1,93 @@
 <template>
   <form method="post" class="form-horizontal" @submit.prevent="doNote">
     <div class="input-group input-group-sm mb-3">
-      <input placeholder="no title" class="form-control form-control-sm" name="title" id="title" v-model="title"/>
+      <b-form-input v-model="title"
+                    type="text"
+                    name="title"
+                    id="title"
+                    placeholder="Enter your title">
+      </b-form-input>
       <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
       <div class="input-group-append">
-        <button v-if="id" class="btn btn-danger btn-sm" @click="removeNote(id)" type="button" id="button-addon2">Delete this note ?</button>
+        <b-button v-if="id" size="sm" variant="danger" @click="removeNote(id)"><i class="fas fa-trash"></i> Delete this note ?
+        </b-button>
       </div>
     </div>
-    <div class="form-group">
-      <label v-if="is_todo==1" class="btn btn-secondary btn-sm active">
-        <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" checked autocomplete="off"> Tasks ?
+    <div class="form-group row">
+      <div class="col-sm-8">
+      <label v-if="is_todo==1" class="btn btn-secondary btn-sm active"><i class="fas fa-tasks"></i> Tasks ?
+      <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" checked autocomplete="off">
       </label>
-      <label v-if="is_todo==0" class="btn btn-secondary btn-sm">
-        <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" autocomplete="on"> Tasks ?
+      <label v-if="is_todo==0" class="btn btn-secondary btn-sm"><i class="fas fa-tasks"></i> Tasks ?
+        <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" autocomplete="on">
       </label>
+      </div>
+      <div class="col-sm-4">
+        <div class="input-group-prepend">
+          <span class="text-muted">Created: {{ moment(created_time).format('lll') }}</span>&nbsp;
+          <b-btn id="note-info" size="sm" variant="secondary"><i class="fas fa-info-circle"></i></b-btn>
+          <b-popover target="note-info" triggers="hover focus">
+            <template slot="title">Note details</template>
+            <ul>
+              <li v-if="author !== ''">Author: {{ author }}</li>
+              <li v-else>Author n/a</li>
+              <li v-if="source_url !== ''">URL: {{ source_url }}</li>
+              <li v-else>URL n/a</li>
+              <li>Date
+                <ul>
+                  <li v-if="created_time > 0">Created: {{ moment(created_time).format('lll') }}</li>
+                  <li v-if="updated_time > 0">Updated: {{ moment(updated_time).format('lll') }}</li>
+                </ul>
+              </li>
+              <li>Geo location
+                <ul>
+                <li>Latitude {{ latitude }}</li>
+                <li>Longitude {{ longitude }}</li>
+                <li>Altitude {{ altitude }}</li>
+                </ul>
+              </li>
+              <li>Tasks
+                <ul>
+                  <li v-if="todo_completed > 0">Todo Completed: {{ moment(todo_completed).format('lll') }}</li>
+                  <li v-else>Todo Competed: n/a</li>
+                  <li v-if="todo_due > 0">Todo Due: {{ moment(todo_due).format('lll') }}</li>
+                  <li v-else>Todo Due: n/a</li>
+                </ul>
+              </li>
+              <li>Source
+                <ul>
+                  <li>Source: {{ source }}</li>
+                  <li>Source Application: {{ source_application }}</li>
+                </ul>
+              </li>
+            </ul>
+          </b-popover>
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
-          <label class="input-group-text" for="inputGroupSelect01">Folder</label>
+          <label class="input-group-text" for="inputGroupSelect01"><i class="fas fa-folder-open"></i> Folder</label>
         </div>
-        <select v-model="parent_id" class="custom-select" id="inputGroupSelect01">
+        <b-form-select v-model="parent_id" class="mb-3" size="sm">
           <option v-for="folder in this.getFolders2" :key="folder.id" :value="folder.id">{{ folder.title }}</option>
-        </select>
+        </b-form-select>
       </div>
       <span class="help is-danger" v-if="errors.has('folder')" v-text="errors.getError('folder')"></span>
     </div>
     <div class="form-group row">
       <div class="col-sm-6">
-        <textarea class="form-control form-control-sm" rows="25" v-model="body" @input="updateBody"></textarea>
+        <b-form-textarea id="body"
+                         v-model="body"
+                         placeholder="Enter something"
+                         :rows="25"
+                         :max-rows="40"
+                         @input="updateBody">
+        </b-form-textarea>
         <span class="help is-danger" v-if="errors.has('body')" v-text="errors.getError('body')"></span><br/>
         <button class="btn btn-primary" :disabled="errors.any()">
-          <span v-if="id">Edit</span>
-          <span v-else>Create</span>
+          <span><i class="fas fa-save"></i> Save</span>
         </button>
       </div>
       <div class="col-sm-6">
@@ -92,7 +147,6 @@ export default {
     /* update the note */
     updateNote () {
       // payload
-      console.log(this.id)
       let payload = {
         'id': this.id,
         'title': this.title,
@@ -109,7 +163,7 @@ export default {
     },
     // translate markdown to html
     updateBody: _.debounce(function (e) {
-      this.input = e.target.value
+      this.body = e
     }, 300),
     ...mapActions(Object.keys(actions))
   },
@@ -124,14 +178,25 @@ export default {
     },
     ...mapGetters(Object.keys(getters)),
 
-    // mapFileds('namespace' {input name: 'object.field', ... })
+    // mapFields('namespace' {input name: 'object.field', ... })
     // this allow to set parent_id with a the id of the object of the object
     ...mapFields('notes', {
       id: 'note.id',
       title: 'note.title',
       body: 'note.body',
       is_todo: 'note.is_todo',
-      parent_id: 'note.parent.id'
+      parent_id: 'note.parent.id',
+      created_time: 'note.created_time',
+      updated_time: 'note.updated_time',
+      todo_completed: 'note.todo_completed',
+      todo_due: 'note.todo_due',
+      source_url: 'note.source_url',
+      author: 'note.author',
+      latitude: 'note.latitude',
+      longitude: 'note.longitude',
+      altitude: 'note.altitude',
+      source: 'note.source',
+      source_application: 'note.source_application'
     })
   }
   /*
