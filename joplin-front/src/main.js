@@ -18,7 +18,8 @@ import router from './router'
 import store from './store'
 
 import App from './App.vue'
-
+import VoerroTagsInput from '@voerro/vue-tagsinput'
+Vue.component('tags-input', VoerroTagsInput)
 Vue.prototype.moment = moment
 
 Vue.use(VueAxios, axios)

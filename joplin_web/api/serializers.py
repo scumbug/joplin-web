@@ -21,18 +21,17 @@ class NotesSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('id', 'parent_id', 'parent', 'title', 'body',
-            'is_todo', 'todo_due',
-            'created_time', 'updated_time',
-            'source', 'source_application',
-            'latitude', 'longitude', 'altitude',
-            'author'
-            )
+                  'is_todo', 'todo_due',
+                  'created_time', 'updated_time',
+                  'source', 'source_application',
+                  'latitude', 'longitude', 'altitude',
+                  'author')
         model = Notes
 
 
 class TagsSerializer(serializers.ModelSerializer):
 
-    nb_notes = serializers.IntegerField()
+    nb_notes = serializers.IntegerField(read_only=True)
 
     class Meta:
         fields = '__all__'
@@ -53,6 +52,15 @@ class NoteTagsSerializer(serializers.ModelSerializer):
         fields = ('id', 'note_id', 'note', 'tag_id', 'tag', 'created_time',
                   'updated_time', 'user_created_time', 'user_updated_time',
                   'encryption_cipher_text', 'encryption_applied')
+        model = NoteTags
+
+
+class NoteTagsByNoteIdSerializer(serializers.ModelSerializer):
+
+    tag = TagsSerializer(read_only=True)
+
+    class Meta:
+        fields = ('tag',)
         model = NoteTags
 
 

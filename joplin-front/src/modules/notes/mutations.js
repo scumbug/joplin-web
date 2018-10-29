@@ -16,7 +16,8 @@ export const mutations = {
         id: 0,
         parent_id: 0
       },
-      is_todo: 0
+      is_todo: 0,
+      tag: ''
     }
   },
 
@@ -26,6 +27,11 @@ export const mutations = {
 
   [types.NOTE_SET]: (state, note) => {
     state.note = note
+  },
+
+  [types.NOTETAG_SET]: (state, tag) => {
+    state.note.tag = tag
+    console.log('dans mutation ', state.note.tag)
   },
 
   [types.NOTE_APPEND]: (state, note) => {

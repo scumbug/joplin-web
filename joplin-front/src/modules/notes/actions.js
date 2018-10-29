@@ -37,6 +37,10 @@ export const actions = {
   [types.NOTE_REMOVE]: async ({ commit }, id) => {
     await notesApi.deleteNote(id)
     commit(types.NOTE_REMOVE, id)
+  },
+
+  [types.NOTETAG_SET]: async ({ commit }, note) => {
+    commit(types.NOTETAG_SET, await notesApi.fetchNoteTags(note))
   }
 }
 

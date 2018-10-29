@@ -106,6 +106,7 @@ export default {
       })
     },
     editNote (note) {
+      this.$store.dispatch('notes/' + types.NOTETAG_SET, note)
       this.$store.dispatch('notes/' + types.NOTE_SET, note)
     },
     delNote (id) {
@@ -142,10 +143,6 @@ export default {
     this.$nextTick(() => {
       this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
     })
-  },
-  created () {
-    // duplicate data with infiniteHandler function
-    // this.$store.dispatch('notes/' + types.NOTE_FETCH_ALL)
   }
 }
 </script>

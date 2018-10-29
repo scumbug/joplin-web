@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'joplin_web',
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [

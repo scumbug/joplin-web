@@ -14,13 +14,19 @@
       </div>
     </div>
     <div class="form-group row">
-      <div class="col-sm-8">
+      <div class="col-sm-2">
       <label v-if="is_todo==1" class="btn btn-secondary btn-sm active"><i class="fas fa-tasks"></i> Tasks ?
       <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" checked autocomplete="off">
       </label>
       <label v-if="is_todo==0" class="btn btn-secondary btn-sm"><i class="fas fa-tasks"></i> Tasks ?
         <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" autocomplete="on">
       </label>
+      </div>
+      <div class="col-sm-6">
+        <tags-input element-id="tag"
+                    v-model="tag"
+                    :typeahead="true">
+        </tags-input>
       </div>
       <div class="col-sm-4">
         <div class="input-group-prepend">
@@ -58,6 +64,7 @@
                 <ul>
                   <li>Source: {{ source }}</li>
                   <li>Source Application: {{ source_application }}</li>
+                  <li>ID: {{ id }}</li>
                 </ul>
               </li>
             </ul>
@@ -100,7 +107,7 @@
 <script>
 import Errors from '../../../core/Errors'
 import { createNamespacedHelpers } from 'vuex'
-
+import VoerroTagsInput from '@voerro/vue-tagsinput'
 import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
@@ -125,7 +132,7 @@ export default {
       errors: new Errors()
     }
   },
-  components: { },
+  components: { VoerroTagsInput },
   methods: {
     doNote () {
       if (this.id === undefined || this.id === 0) {
@@ -140,7 +147,8 @@ export default {
         'title': this.title,
         'body': this.body,
         'parent_id': this.parent_id,
-        'is_todo': (this.is_todo ? 1 : 0)
+        'is_todo': (this.is_todo ? 1 : 0),
+        'tag': this.tag
       }
       this.$store.dispatch('notes/' + types.NOTE_CREATE, payload)
     },
@@ -152,6 +160,7 @@ export default {
         'title': this.title,
         'body': this.body,
         'parent_id': this.parent_id,
+        'tag': this.tag,
         'is_todo': (this.is_todo ? 1 : 0)
       }
       // push the data
@@ -196,13 +205,9 @@ export default {
       longitude: 'note.longitude',
       altitude: 'note.altitude',
       source: 'note.source',
-      source_application: 'note.source_application'
+      source_application: 'note.source_application',
+      tag: 'note.tag'
     })
   }
-  /*
-  mounted () {
-    return Object.assign({}, this.$store.state.notes.note)
-  }
-  */
 }
 </script>

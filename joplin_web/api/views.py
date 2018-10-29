@@ -3,7 +3,7 @@ from django.db.models import Q, Count
 
 from joplin_api import JoplinApi
 from joplin_web.api.serializers import FoldersSerializer, NotesSerializer
-from joplin_web.api.serializers import TagsSerializer, NoteTagsSerializer, VersionSerializer
+from joplin_web.api.serializers import TagsSerializer, NoteTagsSerializer, VersionSerializer, NoteTagsByNoteIdSerializer
 from joplin_web.api.permissions import DjangoModelPermissions
 from joplin_web.models import Folders, Notes, Tags, NoteTags, Version
 
@@ -167,7 +167,7 @@ class NotesViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class NoteTagsViewSet(viewsets.ModelViewSet):
+class NoteTagsByNoteIdViewSet(viewsets.ModelViewSet):
     """
     Note and related Tags
 
@@ -175,13 +175,15 @@ class NoteTagsViewSet(viewsets.ModelViewSet):
     and `destroy` actions.
     """
     queryset = NoteTags.objects.using('joplin').all()
-    serializer_class = NoteTagsSerializer
+    serializer_class = NoteTagsByNoteIdSerializer
     pagination_class = NotesResultsSetPagination
     # filter the tags
     filter_backends = (filters.OrderingFilter,)
     permission_classes = (DjangoModelPermissions, )
-    ordering_fields = ('note', )
-    ordering = ('note',)
+
+    def get_queryset(self):
+        print(self.kwargs['note_id'])
+        return NoteTags.objects.using('joplin').filter(note=self.kwargs['note_id'])
 
 
 class NotesWoTagsViewSet(viewsets.ModelViewSet):

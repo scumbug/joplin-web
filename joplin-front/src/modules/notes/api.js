@@ -48,11 +48,30 @@ export function deleteNote (id) {
   })
 }
 
+export function fetchNoteTags (note) {
+  return new Promise((resolve, reject) => {
+    // this will trigger a retrieval of the tags of this note
+    axios.get('http://127.0.0.1:8001/api/jw/notetags/' + note.id)
+      .then((res) => {
+        let tagString = ''
+        for (let line in res.data.results) {
+          let tag = res.data.results[line]['tag']
+          // console.log('tag? ', tag)
+          tagString += tag.title + ', '
+        }
+        // console.log('tous les tags ' + tagString)
+        resolve(tagString)
+      })
+      .catch(error => { reject(error.statusText) })
+  })
+}
+
 export default {
   fetchNotes,
   createNote,
   updateNote,
   deleteNote,
   fetchNotesByFolder,
-  fetchNotesByTag
+  fetchNotesByTag,
+  fetchNoteTags
 }
