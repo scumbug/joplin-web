@@ -27,11 +27,13 @@ export const actions = {
   },
 
   [types.NOTE_CREATE]: async ({ commit }, note) => {
-    commit(types.NOTE_APPEND, await notesApi.createNote(note))
+    await notesApi.createNote(note)
+    commit(types.NOTE_APPEND, note)
   },
 
   [types.NOTE_CHANGE]: async ({ commit }, note) => {
-    commit(types.NOTE_CHANGE, await notesApi.updateNote(note))
+    await notesApi.updateNote(note)
+    commit(types.NOTE_CHANGE, note)
   },
 
   [types.NOTE_REMOVE]: async ({ commit }, id) => {

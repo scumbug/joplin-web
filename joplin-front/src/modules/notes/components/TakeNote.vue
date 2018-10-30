@@ -1,5 +1,7 @@
 <template>
   <form method="post" class="form-horizontal" @submit.prevent="doNote">
+    <b-alert v-if="updated == 1" v-model="updated" variant="success" show>Update done</b-alert>
+    <b-alert v-if="updated == 0" v-model="updated" variant="danger">Update failed</b-alert>
     <div class="input-group input-group-sm mb-3">
       <b-form-input v-model="title"
                     type="text"
@@ -128,6 +130,7 @@ const { mapFields } = createHelpers({
 export default {
   data () {
     return {
+      updated: -1,
       folders: {},
       errors: new Errors()
     }
@@ -165,6 +168,12 @@ export default {
       }
       // push the data
       this.$store.dispatch('notes/' + types.NOTE_CHANGE, payload)
+        .then((res) => {
+          this.updated = 1
+        })
+        .catch((error) => {
+          this.updated = 0
+        })
     },
     /* delete action pressed */
     removeNote () {
