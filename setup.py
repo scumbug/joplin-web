@@ -6,7 +6,7 @@ install_requires = [
     'djangorestframework==3.8.2',
     'Markdown==2.6.11',
     'django-environ==0.4.5',
-    'requests==2.19.1',
+    'requests==2.20.0',
     'joplin-api==1.1.0',
 ]
 
