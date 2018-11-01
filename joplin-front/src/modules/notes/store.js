@@ -25,9 +25,9 @@ export const store = {
       longitude: 0,
       altitude: 0,
       source: '',
-      source_application: '',
-      tag: ''
+      source_application: ''
     },
+    tag: '',
     notes: []
   },
 

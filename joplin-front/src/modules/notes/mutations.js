@@ -7,7 +7,7 @@ const { updateNoteField } = createHelpers({
 })
 
 export const mutations = {
-  [types.NOTE_NEW]: (state, note) => {
+  [types.NOTE_NEW]: (state) => {
     state.note = {
       id: 0,
       title: '',
@@ -16,9 +16,9 @@ export const mutations = {
         id: 0,
         parent_id: 0
       },
-      is_todo: 0,
-      tag: ''
-    }
+      is_todo: 0
+    },
+    state.tag = ''
   },
 
   [types.NOTE_SET_ALL]: (state, notes) => {
@@ -30,8 +30,7 @@ export const mutations = {
   },
 
   [types.NOTETAG_SET]: (state, tag) => {
-    state.note.tag = tag
-    console.log('dans mutation ', state.note.tag)
+    state.tag = tag
   },
 
   [types.NOTE_APPEND]: (state, note) => {

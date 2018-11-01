@@ -131,13 +131,13 @@ class NotesViewSet(viewsets.ModelViewSet):
         serializer = NotesSerializer(data=request.data)
         if serializer.is_valid():
             data = {'is_todo': request.data.get('is_todo', 0),
-                    'tags': request.data.get('tags', '')}
+                    'tags': request.data.get('tag', '')}
             joplin = JoplinApi(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
 
             res = joplin.create_note(title=request.data['title'],
                                      body=request.data['body'],
                                      parent_id=request.data['parent_id'],
-                                     kwargs=data)
+                                     **data)
             if res.status_code == 200:
                 return Response({'status': 'note created'})
             return Response({'status': 'note not created {}'.format(res.status_code)})
@@ -152,13 +152,13 @@ class NotesViewSet(viewsets.ModelViewSet):
         serializer = NotesSerializer(data=request.data, partial=True)
         if serializer.is_valid():
             data = {'is_todo': request.data.get('is_todo', 0),
-                    'tags': request.data.get('tags', '')}
+                    'tags': request.data.get('tag', '')}
             joplin = JoplinApi(api_type=settings.JOPLIN_API_TYPE, token=settings.JOPLIN_TOKEN)
             res = joplin.update_note(note_id=note_id,
                                      parent_id=request.data['parent_id'],
                                      title=request.data['title'],
                                      body=request.data['body'],
-                                     kwargs=data)
+                                     **data)
             if res.status_code == 200:
                 return Response({'status': 'note updated'})
             return Response({'status': 'note not updated {}'.format(res.status_code)})
@@ -182,7 +182,6 @@ class NoteTagsByNoteIdViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     def get_queryset(self):
-        print(self.kwargs['note_id'])
         return NoteTags.objects.using('joplin').filter(note=self.kwargs['note_id'])
 
 

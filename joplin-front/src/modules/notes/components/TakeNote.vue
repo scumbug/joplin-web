@@ -18,17 +18,19 @@
     <div class="form-group row">
       <div class="col-sm-2">
       <label v-if="is_todo==1" class="btn btn-secondary btn-sm active"><i class="fas fa-tasks"></i> Tasks ?
-      <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" checked autocomplete="off">
+        <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" checked autocomplete="off"/>
       </label>
       <label v-if="is_todo==0" class="btn btn-secondary btn-sm"><i class="fas fa-tasks"></i> Tasks ?
-        <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" autocomplete="on">
+        <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" autocomplete="on"/>
       </label>
       </div>
       <div class="col-sm-6">
-        <tags-input element-id="tag"
-                    v-model="tag"
-                    :typeahead="true">
-        </tags-input>
+        <b-form-input v-model="tag"
+                      type="text"
+                      name="tag"
+                      id="tag"
+                      placeholder="tags, tags">
+        </b-form-input>
       </div>
       <div class="col-sm-4">
         <div class="input-group-prepend">
@@ -95,6 +97,8 @@
                          @input="updateBody">
         </b-form-textarea>
         <span class="help is-danger" v-if="errors.has('body')" v-text="errors.getError('body')"></span><br/>
+        <b-alert v-if="updated == 1" v-model="updated" variant="success" show>Update done</b-alert>
+        <b-alert v-if="updated == 0" v-model="updated" variant="danger">Update failed</b-alert>
         <button class="btn btn-primary" :disabled="errors.any()">
           <span><i class="fas fa-save"></i> Save</span>
         </button>
@@ -215,7 +219,7 @@ export default {
       altitude: 'note.altitude',
       source: 'note.source',
       source_application: 'note.source_application',
-      tag: 'note.tag'
+      tag: 'tag'
     })
   }
 }
