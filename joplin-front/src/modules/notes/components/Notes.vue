@@ -88,7 +88,7 @@ export default {
         params.page = this.page
       }
       */
-      axios.get('http://127.0.0.1:8001/api/jw/notes/', {
+      axios.get('/api/jw/notes/', {
         params: params
       }).then((res) => {
         if (res.data.count > 0) {

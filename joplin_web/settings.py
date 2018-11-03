@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'joplin_web',
-    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -73,8 +72,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-
 
 ROOT_URLCONF = 'joplin_web.urls'
 

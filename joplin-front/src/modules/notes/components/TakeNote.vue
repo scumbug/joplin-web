@@ -113,7 +113,7 @@
 <script>
 import Errors from '../../../core/Errors'
 import { createNamespacedHelpers } from 'vuex'
-import VoerroTagsInput from '@voerro/vue-tagsinput'
+
 import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
@@ -139,7 +139,7 @@ export default {
       errors: new Errors()
     }
   },
-  components: { VoerroTagsInput },
+  components: {  },
   methods: {
     doNote () {
       if (this.id === undefined || this.id === 0) {

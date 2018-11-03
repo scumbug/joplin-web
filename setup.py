@@ -1,14 +1,21 @@
+#!/usr/bin/env python
+# coding: utf-8
+import os
 from setuptools import setup, find_packages
 from joplin_web import __version__ as version
 
-install_requires = [
-    'django-filter==2.0.0',
-    'djangorestframework==3.8.2',
-    'Markdown==2.6.11',
-    'django-environ==0.4.5',
-    'requests==2.20.0',
-    'joplin-api==1.1.0',
-]
+
+def strip_comments(l):
+    return l.split('#', 1)[0].strip()
+
+
+def reqs(*f):
+    return list(filter(None, [strip_comments(l) for l in open(
+        os.path.join(os.getcwd(), *f)).readlines()]))
+
+
+install_requires = reqs('requirements.txt')
+
 
 setup(
     name='joplin_web',
