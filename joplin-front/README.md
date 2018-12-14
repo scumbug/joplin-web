@@ -37,4 +37,10 @@ npm run lint
 
 ## Joplin-web : The BackEnd 
 
+if you want to change the port of your back edit vue.config.js and change 
+```
+target: 'http://127.0.0.1:8001'
+```
+to the value that fit your needs
+
 see [`joplin-web/joplin_web/README.md`](../README.md) file

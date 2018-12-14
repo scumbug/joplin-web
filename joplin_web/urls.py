@@ -17,12 +17,10 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
-from joplin_web.views import base
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/jw/', include('joplin_web.api.urls')),
-    url(r'^$', base, name="base"),
 ]
 if settings.DEBUG:
     import debug_toolbar

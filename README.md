@@ -51,6 +51,7 @@ this will add the tables of django but will not change any joplin tables
 ```python
 python manage.py runserver localhost:8001 &
 ```
+if you map another port, you will need to have a look at the front end `vue.config.js` file
 
 # Joplin-front : The Frontend
 
