@@ -1,7 +1,7 @@
-requests==2.20.0
-django-filter==2.0.0
-djangorestframework==3.9.0
+requests==2.21.0
+django-filter==2.1.0
+djangorestframework==3.9.1
 Markdown==3.0.1
 django-environ==0.4.5
 django-cors-headers==2.4.0
-joplin-api==1.2.1
+joplin-api==1.2.2
