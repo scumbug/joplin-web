@@ -1,11 +1,10 @@
 <template>
-  <div>
-  <ul class="list-group">
-    <book v-for="book in this.getFolders" :key="book.id">
-      <a href="#" @click="notesByFolder(book)">{{ book.title }}</a>&nbsp;<span class="badge badge-secondary badge-pill">{{ book.nb_notes }}</span>
-    </book>
+  <ul>
+    <li v-if="book.parent_id == ''" v-for="book in this.getFolders" :key="book.id">
+        <a href="#" @click="notesByFolder(book)">{{ book.title }}</a>&nbsp;<span class="badge badge-secondary badge-pill">{{ book.nb_notes }}</span>
+        <book :parent_book="book"/>
+    </li>
   </ul>
-  </div>
 </template>
 
 <script>

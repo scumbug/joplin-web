@@ -3,7 +3,7 @@ from django.db.models import Q, Count
 
 from joplin_api import JoplinApi
 from joplin_web.api.serializers import FoldersSerializer, NotesSerializer
-from joplin_web.api.serializers import TagsSerializer, NoteTagsSerializer, VersionSerializer, NoteTagsByNoteIdSerializer
+from joplin_web.api.serializers import TagsSerializer, VersionSerializer, NoteTagsByNoteIdSerializer
 from joplin_web.api.permissions import DjangoModelPermissions
 from joplin_web.models import Folders, Notes, Tags, NoteTags, Version
 
@@ -36,21 +36,21 @@ class FoldersViewSet(viewsets.ModelViewSet):
     ordering = ('title',)
 
     def get_queryset(self):
-        """
-        return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
-            .values('title', 'nb_notes', 'id', 'parent_id').order_by('parent_id', 'title')
-        """
-        return Folders.objects.using('joplin').raw('''
+         return Folders.objects.using('joplin').annotate(nb_notes=Count("notes__id"))\
+                  .values('title', 'nb_notes', 'id', 'parent_id').order_by('parent_id', 'title')
+         """
+         return Folders.objects.using('joplin').raw('''
          WITH RECURSIVE parent(n) AS (
-         SELECT folders.id FROM folders UNION SELECT title FROM folders, parent WHERE folders.parent_id=parent.n 
-         ) 
-         SELECT "folders"."title", "folders"."id", "folders"."parent_id", COUNT("notes"."id") AS "nb_notes" 
-         FROM "folders" 
-         LEFT OUTER JOIN "notes" ON ("folders"."id" = "notes"."parent_id")  
-         WHERE "folders"."id" IN parent 
-         GROUP BY "folders"."id", "folders"."title" 
-         ORDER BY "folders"."parent_id", "folders"."title" ASC        
+         SELECT folders.id FROM folders UNION SELECT title FROM folders, parent WHERE folders.parent_id=parent.n
+         )
+         SELECT "folders"."title", "folders"."id", "folders"."parent_id", COUNT("notes"."id") AS "nb_notes"
+         FROM "folders"
+         LEFT OUTER JOIN "notes" ON ("folders"."id" = "notes"."parent_id")
+         WHERE "folders"."id" IN parent
+         GROUP BY "folders"."id", "folders"."title"
+         ORDER BY "folders"."parent_id", "folders"."title" ASC
          ''')
+         """
 
     def create(self, request, *args, **kwargs):
         serializer = FoldersSerializer(data=request.data)
