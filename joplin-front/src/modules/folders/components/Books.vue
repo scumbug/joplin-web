@@ -1,6 +1,9 @@
 <template>
-  <ul>
-    <li v-if="book.parent_id == ''" v-for="book in this.getFolders" :key="book.id">
+  <ul class="list-group">
+    <li class="list-group-item justify-content-between align-items-center"
+        v-if="book.parent_id == ''"
+        v-for="book in this.getFolders"
+        :key="book.id">
         <a href="#" @click="notesByFolder(book)">{{ book.title }}</a>&nbsp;<span class="badge badge-secondary badge-pill">{{ book.nb_notes }}</span>
         <book :parent_book="book"/>
     </li>
