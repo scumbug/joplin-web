@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     notesByFolder (folder) {
+      let tag = {}
       this.$store.dispatch('folders/' + types.FOLDER_FETCH, folder)
       this.$store.dispatch('tags/' + typesTag.TAG_FETCH, tag)
       this.$store.dispatch('notes/' + typesNote.NOTE_FETCH_FOLDER, folder)
