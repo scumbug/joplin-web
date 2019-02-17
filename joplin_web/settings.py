@@ -44,7 +44,7 @@ DB_PATH = env.str('JOPLIN_PATH', default=BASE_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('SECRET_KEY', default='to be defined :P')
 # set to False when using in production
-DEBUG = env.bool('DEBUG', default=True),
+DEBUG = env.bool('DEBUG', default=False),
 
 ALLOWED_HOSTS = ['*']
 
@@ -148,6 +148,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    "/home/foxmask/.config/joplin-desktop/resources/",
+]
 
 LOGGING = {
     'version': 1,

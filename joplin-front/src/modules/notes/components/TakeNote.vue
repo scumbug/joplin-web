@@ -134,12 +134,13 @@ const { mapFields } = createHelpers({
 export default {
   data () {
     return {
+      urlResources: 'http://127.0.0.1:8001/static',
       updated: -1,
       folders: {},
       errors: new Errors()
     }
   },
-  components: {  },
+  components: { },
   methods: {
     doNote () {
       if (this.id === undefined || this.id === 0) {
@@ -185,7 +186,13 @@ export default {
     },
     // translate markdown to html
     updateBody: _.debounce(function (e) {
-      this.body = e
+      // spot image markdown
+      let re = /\!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      // image markdown : ![image name.extension](:/resource_id)
+      // becomes
+      // image markdown : ![image name.extension](http://127.0.0.1:8001/static/resource_id.extension)
+      // add the URL to access to the image from the back http service
+      this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
     }, 300),
     ...mapActions(Object.keys(actions))
   },
