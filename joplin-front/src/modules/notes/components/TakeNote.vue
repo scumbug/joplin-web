@@ -176,6 +176,7 @@ export default {
         .then((res) => {
           this.updated = 1
         })
+        // eslint-disable-next-line
         .catch((error) => {
           this.updated = 0
         })
@@ -187,6 +188,7 @@ export default {
     // translate markdown to html
     updateBody: _.debounce(function (e) {
       // spot image markdown
+      // eslint-disable-next-line
       let re = /\!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
       // image markdown : ![image name.extension](:/resource_id)
       // becomes

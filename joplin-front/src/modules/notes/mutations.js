@@ -17,7 +17,7 @@ export const mutations = {
         parent_id: 0
       },
       is_todo: 0
-    },
+    }
     state.tag = ''
   },
 
