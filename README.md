@@ -1,10 +1,10 @@
 # Joplin Web : The BackEnd
 
-A Web application for [Joplin](https://joplin.cozic.net/)
+A Web application for [JoplinApp](https://joplinapp.org)
 
 ## why that project ?
 
-Because it may happened we need to access to [Joplin](https://joplin.cozic.net/) without having access to his/her smartphone or the Joplin Desktop, and a Web Application could to the trick at a given moment.
+Because it may happened we need to access to [JoplinApp](https://joplinapp.org) without having access to his/her smartphone or the Joplin Desktop, and a Web Application could to the trick at a given moment.
 
 ## Requirements
 
