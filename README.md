@@ -53,8 +53,10 @@ python manage.py runserver localhost:8001 &
 ```
 if you map another port, you will need to have a look at the front end `vue.config.js` file
 
+don't forget to start your joplin editor to be able to reach the webclipper port 
+
 # Joplin-front : The Frontend
 
-see [`joplin-web/joplin-front/README.md`](joplin-front/README.md) file
+see [`joplin-web/joplin-vue/README.md`](joplin-vue/README.md) file
 
 ![Joplin web](https://raw.githubusercontent.com/foxmask/joplin-web/master/joplin_web.png)
