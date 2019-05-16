@@ -6,7 +6,7 @@
       >{{ tag.title }}
       <b-badge pill>{{ tag.nb_notes }}</b-badge>
     </b-list-group-item>
-  </b-list-group>  
+  </b-list-group>
 </template>
 
 <script>

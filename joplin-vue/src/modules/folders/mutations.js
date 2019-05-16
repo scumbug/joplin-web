@@ -1,15 +1,7 @@
 import types from './types'
-// import * as d3 from 'd3'
 
 export const mutations = {
   [types.FOLDER_SET_ALL]: (state, folders) => {
-    /*
-    let newData =
-        d3.nest()
-          .key(function (d) { return d.parent_id })
-          //.key(function (d) { return d.title })
-          .entries(folders)
-    */
     state.folders = folders
   },
 
