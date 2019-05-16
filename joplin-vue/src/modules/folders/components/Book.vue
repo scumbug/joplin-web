@@ -1,13 +1,14 @@
 <template>
-  <ul class="list-group">
-    <li class="list-group-item justify-content-between align-items-center"
-        v-if="book.parent_id == parent_book.id"
+  <b-list-group>
+    <b-list-group-item class="d-flex justify-content-between align-items-center"
         v-for="book in this.getFolderById(parent_book.id)"
-        :key="book.id">
-        <a href="#" @click="notesByFolder(book)">{{ book.title }}</a>&nbsp;<span class="badge badge-secondary badge-pill">{{ book.nb_notes }}</span>
+        :key="book.id"
+        href="#" @click="notesByFolder(book)"
+        >{{ book.title }}
+        <b-badge variant="primary" pill>{{ book.nb_notes }}</b-badge>
         <book :parent_book="book"/>
-    </li>
-  </ul>
+    </b-list-group-item>
+  </b-list-group>
 </template>
 
 <script>

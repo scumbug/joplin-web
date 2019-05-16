@@ -5,22 +5,9 @@
       <b-tab title="notes" active>
         <b-list-group>
           <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
-            <b-card :title="note.title" v-if="note.todo_completed == 1" border-variant="success">
+            <b-card :title="note.title" v-if="note.is_todo === 0">
               <p class="card-text">
                 <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
-                <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
-              </p>
-            </b-card>
-            <b-card :title="note.title" v-else-if="note.is_todo == 1 && note.todo_due > 0" border-variant="warning">
-              <p class="card-text">
-                <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
-                <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
-              </p>
-            </b-card>
-            <b-card :title="note.title" v-else>
-              <p class="card-text">
-                <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
-                <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
               </p>
             </b-card>
           </a>
@@ -28,14 +15,13 @@
       </b-tab>
       <b-tab title="tasks">
         <b-list-group>
-          <a v-for="note in this.getTasks" :key="note.id" href="#" @click="editNote(note)">
-            <Task v-bind:note='note'/>
-          </a>
-          <a v-for="note in this.getTasksDue" :key="note.id" href="#" @click="editNote(note)">
-            <Task v-bind:note='note'/>
-          </a>
-          <a v-for="note in this.getTasksCompleted" :key="note.id" href="#" @click="editNote(note)">
-            <Task v-bind:note='note'/>
+          <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
+            <b-card :title="note.title" v-if="note.is_todo === 1">
+              <p class="card-text" border-variant="light">
+                  <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+                  <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
+              </p>
+            </b-card>
           </a>
         </b-list-group>
       </b-tab>
@@ -50,12 +36,7 @@
 <script>
 import axios from 'axios'
 import InfiniteLoading from 'vue-infinite-loading'
-// note content
-import Note from './Note.vue'
-import Task from './Task.vue'
-
 import { createNamespacedHelpers } from 'vuex'
-
 import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
@@ -69,11 +50,12 @@ export default {
       page: 0
     }
   },
-  components: { Note, Task, InfiniteLoading },
+  components: { InfiniteLoading },
   methods: {
     infiniteHandler ($state) {
+      let path = '/api/jw/notes/'
       let params = {}
-      let pageSize = 20
+      let pageSize = 200
       // params.notebook = this.$store.state.folders.folder.title
 
       if ((this.$store.state.notes.notes.length / 20) > 0) {
@@ -88,14 +70,23 @@ export default {
         params.page = this.page
       }
       */
-      axios.get('/api/jw/notes/', {
+      if (this.$store.state.folders.folder.id) {
+        path = '/api/jw/notes/folder/' + this.$store.state.folders.folder.id
+      }
+
+      axios.get(path, {
         params: params
       }).then((res) => {
         if (res.data.count > 0) {
           // concat the result from the backend with the store
           let notes = this.$store.state.notes.notes.concat(res.data.results)
-          // update the store
-          this.$store.dispatch('notes/' + types.NOTE_FETCH_PAGE, notes)
+          // update the store for the current folder
+          if (params.folder) {
+            this.$store.dispatch('notes/' + types.NOTE_FETCH_FOLDER, this.$store.state.folders.folder)
+          } else {
+            // update the store for all the notes and folder
+            this.$store.dispatch('notes/' + types.NOTE_FETCH_PAGE, notes)
+          }
           $state.loaded()
           if (notes.count / pageSize === 10) {
             $state.complete()
@@ -119,15 +110,6 @@ export default {
   },
   computed: {
     ...mapGetters(Object.keys(getters)),
-    getTasks () {
-      return this.$store.state.notes.notes.filter(note => note.is_todo === 1 && note.todo_completed === 0)
-    },
-    getTasksDue () {
-      return this.$store.state.notes.notes.filter(note => note.is_todo === 1 && note.todo_due > 0)
-    },
-    getTasksCompleted () {
-      return this.$store.state.notes.notes.filter(note => note.todo_completed === 1)
-    },
     title: {
       get () {
         if (this.$store.state.folders.folder.title !== undefined) {

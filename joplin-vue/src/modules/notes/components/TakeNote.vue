@@ -81,7 +81,7 @@
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect01"><i class="fas fa-folder-open"></i> Folder</label>
         </div>
-        <b-form-select v-model="parent_id" class="mb-3" size="sm">
+        <b-form-select v-model="parent_id" id="parent_id" name="parent_id" >
           <option v-for="folder in this.getFolders2" :key="folder.id" :value="folder.id">{{ folder.title }}</option>
         </b-form-select>
       </div>

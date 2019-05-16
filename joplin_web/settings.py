@@ -225,14 +225,14 @@ CORS_ALLOW_HEADERS = (
 )
 
 CORS_ORIGIN_WHITELIST = (
-    'localhost:8001',
-    'localhost:8000',
-    '127.0.0.1:8001',
-    '127.0.0.1:8000',
-    'localhost:8080',
-    '127.0.0.1:8080',
+    'http://localhost:8001',
+    'http://localhost:8000',
+    'http://127.0.0.1:8001',
+    'http://127.0.0.1:8000',
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
 )
-
+"""
 if DEBUG:
     # DJANGO DEBUG TOOLBAR
     INSTALLED_APPS += ['debug_toolbar']
@@ -254,3 +254,4 @@ if DEBUG:
         'debug_toolbar.panels.logging.LoggingPanel',
         'debug_toolbar.panels.redirects.RedirectsPanel',
     ]
+"""

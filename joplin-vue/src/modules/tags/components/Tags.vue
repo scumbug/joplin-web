@@ -1,17 +1,16 @@
 <template>
-  <div>
-    <ul class="list-group">
-    <tag v-for="tag in this.getTags" :key="tag.id">
-      <a href="#" @click="notesByTag(tag)">{{ tag.title }}</a>&nbsp;<span class="badge badge-primary badge-pill">{{ tag.nb_notes }}<slot></slot></span>
-    </tag>
-    </ul>
-  </div>
+  <b-list-group>
+    <b-list-group-item class="d-flex justify-content-between align-items-center"
+       v-for="tag in this.getTags" :key="tag.id"
+       href="#" @click="notesByTag(tag)"
+      >{{ tag.title }}
+      <b-badge pill>{{ tag.nb_notes }}</b-badge>
+    </b-list-group-item>
+  </b-list-group>  
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-
-import Tag from './Tag'
 
 import getters from '../getters'
 import actions from '../actions'
@@ -27,7 +26,6 @@ export default {
     return {
     }
   },
-  components: { Tag },
   methods: {
     ...mapActions(Object.keys(actions)),
     notesByTag (tag) {
