@@ -2,10 +2,10 @@
   "name": "joplin-vue",
   "description": "Joplin Editor",
   "version": "0.2.0",
-  "author": "FoxMaSk <foxmaskhome@gmail.com>",
+  "author": "FoxMaSk <fomask@protonmail.com>",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --mode development --host localhost --port 8080",
+    "serve": "vue-cli-service serve --mode development --host 0.0.0.0 --port 8080",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },

@@ -4,4 +4,4 @@ djangorestframework==3.9.1
 Markdown==3.0.1
 django-environ==0.4.5
 django-cors-headers==2.4.0
-joplin-api==1.2.2
+joplin-api==1.2.3
