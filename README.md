@@ -55,8 +55,47 @@ if you map another port, you will need to have a look at the front end `vue.conf
 
 don't forget to start your joplin editor to be able to reach the webclipper port 
 
+## Docker 
+
+if you prefer to use docker instead of using the previous virtualenv, set the paramaters from the ` settings` section above
+then
+
+### build
+
+build the image docker
+```
+docker build -t foxmask/joplin-web .
+```
+
+### run
+
+then launch it like this
+```
+docker run -it --network host -p 8001:8001 --rm --name foxmask-joplin-web-1 --mount type=bind,source="/home/foxmask/.config/joplin-desktop/database.sqlite",target=/home/foxmask/.config/joplin-desktop/database.sqlite foxmask/joplin-web
+```
+
+explanations :
+
+1) we will need to "mount" a volume to access to the Joplin database from our docker container 
+
+this is the purpose of the ` --mount` parm with `source` and `target` which point, both, to the path `/home/foxmask/.config/joplin-desktop/database.sqlite`
+this is needed by the `.env` file  where you will need to set the JOPLIN_PATH which is in my case `/home/foxmask/.config/joplin-desktop/`
+ 
+2) Once the image is built, docker does not even know our local Joplin Webclipper service on the port 41148, so the final trick is to use :
+`--network host` which allow docker to access to the network of the host, and here we go.
+ 
+### changing the port 8001 
+
+if you want / need to switch the 8001 for the docker image, you will need to make the following changes :
+
+1) edit the Dockerfile and change 8001 anywhere with your own port
+2) change the param `-p` on the `docker run` command 
+
+
 # Joplin-front : The Frontend
 
 see [`joplin-web/joplin-vue/README.md`](joplin-vue/README.md) file
 
 ![Joplin web](https://raw.githubusercontent.com/foxmask/joplin-web/master/joplin_web.png)
+
+
