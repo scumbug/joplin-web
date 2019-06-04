@@ -1,11 +1,11 @@
 <template>
   <b-list-group>
     <b-list-group-item class="justify-content-between align-items-center"
-      v-for="book in this.getParentFolders"
-      :key="book.id">
-      <a href="#" @click="notesByFolder(book)">{{ book.title }}</a>&nbsp;
-      <b-badge pill>{{ book.nb_notes }}</b-badge>
-      <book :parent_book="book"/>
+      v-for="folder in this.getParentFolders"
+      :key="folder.id">
+      <a href="#" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
+      <b-badge pill>{{ folder.nb_notes }}</b-badge>
+      <folder :parent_folder="folder"/>
     </b-list-group-item>
   </b-list-group>
 </template>
@@ -13,7 +13,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
-import Book from './Book'
+import Folder from './Folder'
 
 import getters from '../getters'
 import actions from '../actions'
@@ -30,7 +30,7 @@ export default {
       selection: []
     }
   },
-  components: { Book },
+  components: { Folder },
   methods: {
     notesByFolder (folder) {
       let tag = {}

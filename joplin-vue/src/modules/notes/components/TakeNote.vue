@@ -134,7 +134,7 @@ const { mapFields } = createHelpers({
 export default {
   data () {
     return {
-      urlResources: 'http://127.0.0.1:8001/static',
+      urlResources: '/static',
       updated: -1,
       folders: {},
       errors: new Errors()
@@ -210,13 +210,12 @@ export default {
     ...mapGetters(Object.keys(getters)),
 
     // mapFields('namespace' {input name: 'object.field', ... })
-    // this allow to set parent_id with a the id of the object of the object
     ...mapFields('notes', {
       id: 'note.id',
       title: 'note.title',
       body: 'note.body',
       is_todo: 'note.is_todo',
-      parent_id: 'note.parent.id',
+      parent_id: 'note.parent_id',
       created_time: 'note.created_time',
       updated_time: 'note.updated_time',
       todo_completed: 'note.todo_completed',

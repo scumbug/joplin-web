@@ -9,17 +9,17 @@
     </div>
     <div class="row">
       <div class="col-2">
-        <h5><i class="fas fa-folder-open"></i> Books
-          <b-btn v-b-toggle.newbook variant="primary" size="sm"><i class="fas fa-plus-circle"></i></b-btn>
-            <b-collapse id="newbook" class="mt-2">
+        <h5><i class="fas fa-folder-open"></i> Folders
+          <b-btn v-b-toggle.newfolder variant="primary" size="sm"><i class="fas fa-plus-circle"></i></b-btn>
+            <b-collapse id="newfolder" class="mt-2">
               <form @submit.prevent="newFolder">
                  <div class="form-group">
-                   <input type="text" v-model="folder" class="form-control" id="folder" placeholder="Book name">
+                   <input type="text" v-model="folder" class="form-control" id="folder" placeholder="Folder name">
                   </div>
               </form>
             </b-collapse>
         </h5>
-        <books></books>
+        <folders></folders>
         <h5><i class="fas fa-tags"></i> Tags
           <b-btn v-b-toggle.newtag variant="primary" size="sm"><i class="fas fa-plus-circle"></i></b-btn>
           <b-collapse id="newtag" class="mt-2">
@@ -44,7 +44,7 @@
 
 <script>
 import Navbar from './components/NavBar.vue'
-import Books from './modules/folders/components/Books.vue'
+import Folders from './modules/folders/components/Folders.vue'
 import Tags from './modules/tags/components/Tags.vue'
 import Notes from './modules/notes/components/Notes.vue'
 import TakeNote from './modules/notes/components/TakeNote.vue'
@@ -53,7 +53,7 @@ import typesFolders from './modules/folders/types'
 import typesTags from './modules/tags/types'
 
 export default {
-  components: { Navbar, Books, Tags, Notes, TakeNote },
+  components: { Navbar, Folders, Tags, Notes, TakeNote },
   data () {
     return {
       folder: '',

@@ -55,31 +55,30 @@ export default {
     infiniteHandler ($state) {
       let path = '/api/jw/notes/'
       let params = {}
-      let pageSize = 200
+      let pageSize = 20
       // params.notebook = this.$store.state.folders.folder.title
 
       if ((this.$store.state.notes.notes.length / 20) > 0) {
-        this.page = (this.$store.state.notes.notes.length / 20) + 1
+        this.page = Math.round(this.$store.state.notes.notes.length / 20) + 1
       }
       if (this.page > 0) {
         params.page = this.page
       }
-      /*
-      if (this.q !== '') {
-        params.q = this.q
-        params.page = this.page
-      }
-      */
+
+      // if (this.q !== '') {
+      //   params.q = this.q
+      //   params.page = this.page
+      // }
+
       if (this.$store.state.folders.folder.id) {
         path = '/api/jw/notes/folder/' + this.$store.state.folders.folder.id
       }
-
       axios.get(path, {
         params: params
       }).then((res) => {
-        if (res.data.count > 0) {
+        if (res.data.length > 0) {
           // concat the result from the backend with the store
-          let notes = this.$store.state.notes.notes.concat(res.data.results)
+          let notes = this.$store.state.notes.notes.concat(res.data)
           // update the store for the current folder
           if (params.folder) {
             this.$store.dispatch('notes/' + types.NOTE_FETCH_FOLDER, this.$store.state.folders.folder)
@@ -88,7 +87,7 @@ export default {
             this.$store.dispatch('notes/' + types.NOTE_FETCH_PAGE, notes)
           }
           $state.loaded()
-          if (notes.count / pageSize === 10) {
+          if (notes.length / pageSize === 10) {
             $state.complete()
           }
         } else {
@@ -113,7 +112,7 @@ export default {
     title: {
       get () {
         if (this.$store.state.folders.folder.title !== undefined) {
-          return '<i class="fas fa-folder-open"></i> From Book / ' + this.$store.state.folders.folder.title
+          return '<i class="fas fa-folder-open"></i> From Folder / ' + this.$store.state.folders.folder.title
         } else if (this.$store.state.tags.tag.title !== undefined) {
           return '<i class="fas fa-tags"></i> From Tag / ' + this.$store.state.tags.tag.title
         }

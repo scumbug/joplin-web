@@ -10,9 +10,7 @@ Because it may happened we need to access to [JoplinApp](https://joplinapp.org) 
 
 * Python >= 3.6
 * [Joplin-API](https://github.com/foxmask/joplin-api)
-* [Django Rest Framework](http://www.django-rest-framework.org/#installation)
-* django-environ
-* requests
+* [starlette](https://starlette.io)
 
 ## Installation 
 

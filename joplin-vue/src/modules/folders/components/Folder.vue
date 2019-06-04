@@ -1,12 +1,12 @@
 <template>
   <b-list-group>
     <b-list-group-item class="d-flex justify-content-between align-items-center"
-        v-for="book in this.getFolderById(parent_book.id)"
-        :key="book.id"
-        href="#" @click="notesByFolder(book)"
-        >{{ book.title }}
-        <b-badge variant="primary" pill>{{ book.nb_notes }}</b-badge>
-        <book :parent_book="book"/>
+        v-for="folder in this.getFolderById(parent_folder.id)"
+        :key="folder.id"
+        href="#" @click="notesByFolder(folder)"
+        >{{ folder.title }}
+        <b-badge variant="primary" pill>{{ folder.nb_notes }}</b-badge>
+        <folder :parent_folder="folder"/>
     </b-list-group-item>
   </b-list-group>
 </template>
@@ -24,9 +24,9 @@ const namespace = 'folders'
 const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 
 export default {
-  name: 'Book',
+  name: 'Folder',
   props: {
-    parent_book: Object
+    parent_folder: Object
   },
   computed: {
     ...mapGetters(Object.keys(getters))

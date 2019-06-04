@@ -1,7 +1,7 @@
-import Books from './components/Books.vue'
+import Folders from './components/Folders.vue'
 
 export const routes = [
-  { path: '/folders', component: Books, props: true }
+  { path: '/folders', component: Folders, props: true }
 ]
 
 export default routes
