@@ -85,7 +85,7 @@
           <option v-for="folder in this.getFolders2"
               :key="folder.id"
               :value="folder.id"
-              :selected="parent_id == folder.id">{{ folder.title }}</option>
+              :selected="parent_id == folder.id">{{ folder.id }} {{ parent_id }}  {{ folder.title }}</option>
         </b-form-select>
       </div>
       <span class="help is-danger" v-if="errors.has('folder')" v-text="errors.getError('folder')"></span>

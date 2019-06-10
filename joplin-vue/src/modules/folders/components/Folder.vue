@@ -1,12 +1,14 @@
 <template>
   <b-list-group>
     <b-list-group-item class="d-flex justify-content-between align-items-center"
-        v-for="folder in this.getFolderById(parent_folder.id)"
+        v-for="folder in parent_folder"
         :key="folder.id"
         href="#" @click="notesByFolder(folder)"
-        >{{ folder.title }}
+        >
+        <a href="#" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
+        <b-badge pill>{{ folder.nb_notes }}</b-badge>
         <b-badge variant="primary" pill>{{ folder.nb_notes }}</b-badge>
-        <folder :parent_folder="folder"/>
+        <folder :parent_folder="Object.assign({}, folder.children)"/>
     </b-list-group-item>
   </b-list-group>
 </template>
