@@ -81,8 +81,11 @@
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect01"><i class="fas fa-folder-open"></i> Folder</label>
         </div>
-        <b-form-select v-model="parent_id" id="parent_id" name="parent_id" >
-          <option v-for="folder in this.getFolders2" :key="folder.id" :value="folder.id">{{ folder.title }}</option>
+        <b-form-select v-model="parent_id" id="parent_id" name="parent_id" value="parent_id">
+          <option v-for="folder in this.getFolders2"
+              :key="folder.id"
+              :value="folder.id"
+              :selected="parent_id == folder.id">{{ folder.title }}</option>
         </b-form-select>
       </div>
       <span class="help is-danger" v-if="errors.has('folder')" v-text="errors.getError('folder')"></span>
@@ -182,8 +185,8 @@ export default {
         })
     },
     /* delete action pressed */
-    removeNote () {
-      this.$store.dispatch('notes/' + types.NOTE_REMOVE, this.id)
+    removeNote (id) {
+      this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
     },
     // translate markdown to html
     updateBody: _.debounce(function (e) {
@@ -216,7 +219,7 @@ export default {
       body: 'note.body',
       is_todo: 'note.is_todo',
       parent_id: 'note.parent_id',
-      created_time: 'note.created_time',
+      created_time: 'note.user_created_time',
       updated_time: 'note.updated_time',
       todo_completed: 'note.todo_completed',
       todo_due: 'note.todo_due',

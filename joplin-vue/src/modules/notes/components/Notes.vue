@@ -7,7 +7,7 @@
           <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
             <b-card :title="note.title" v-if="note.is_todo === 0">
               <p class="card-text">
-                <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+                <small class="text-muted">created: {{ moment(note.user_created_time).format('lll') }}</small>
               </p>
             </b-card>
           </a>
@@ -18,7 +18,7 @@
           <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
             <b-card :title="note.title" v-if="note.is_todo === 1">
               <p class="card-text" border-variant="light">
-                  <small class="text-muted">created: {{ moment(note.created_time).format('lll') }}</small>
+                  <small class="text-muted">created: {{ moment(note.user_created_time).format('lll') }}</small>
                   <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
               </p>
             </b-card>

@@ -16,14 +16,16 @@ import uvicorn
 from joplin_api import JoplinApi
 
 templates = Jinja2Templates(directory="templates")
-statics = StaticFiles(directory="static")
-
-app = Starlette()
-app.debug = True
-app.mount('/static', StaticFiles(directory="static"))
 
 # load configuration
 settings = Config('.env')
+
+
+app = Starlette()
+app.debug = True
+app.mount('/static', StaticFiles(directory=settings('JOPLIN_RESOURCES')))
+app.mount('/css', StaticFiles(directory="static/css"))
+app.mount('/js', StaticFiles(directory="static/js"))
 
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
 
@@ -158,8 +160,8 @@ async def create_notes(request):
 
 # Update note
 async def update_note(request):
+    note_id = request.path_params['note_id']
     payload = await request.json()
-    note_id = payload['note_id']
     title = payload['title']
     body = payload['body']
     parent_id = payload['parent_id']
@@ -171,7 +173,10 @@ async def update_note(request):
 async def delete_note(request):
     note_id = request.path_params['note_id']
     res = await joplin.delete_note(note_id)
-    return JSONResponse(res.json())
+    data = {}
+    if res.status_code == 200:
+        data = {'MSG': 'OK'}
+    return JSONResponse(data)
 
 
 # create folder
@@ -219,12 +224,12 @@ app = Router([
         Mount('/notes', app=Router([
             Route('/', endpoint=get_notes, methods=['GET']),
             Route('/', endpoint=create_notes, methods=['POST']),
+            Route('/{note_id}', endpoint=get_note, methods=['GET']),
             Route('/{note_id}', endpoint=update_note, methods=['PATCH']),
             Route('/{note_id}', endpoint=delete_note, methods=['DELETE']),
+            Route('/{note_id}/tags/', endpoint=get_notes_tags, methods=['GET']),
             Route('/folder/{folder}', endpoint=get_notesbyfolder, methods=['GET']),
             Route('/tag/{tag_id}', endpoint=get_notesbytag, methods=['GET']),
-            Route('/{note_id}', endpoint=get_note, methods=['GET']),
-            Route('/{note_id}/tags/', endpoint=get_notes_tags, methods=['GET']),
         ]))
     ]))
 ])

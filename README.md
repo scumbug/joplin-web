@@ -27,10 +27,10 @@ pip install -r requirements.txt
 
 copy env.sample to .env
 
-then set : 
+then set at least this parm: 
 
-* the `JOPLIN_PATH` to the database 
-* the `JOPLIN_TOKEN` you have in the Webclipper config page in Joplin
+* the `JOPLIN_WEBCLIPPER_TOKEN` you have in the Webclipper config page in Joplin
+* the `JOPLIN_RESOURCES` to find the files of joplin and being able to load them in the editori 
 
 
 If you plan to use joplin-terminal and not the WebClipper, in your `.env` file, set `API_USE_JOPLIN_WEBCLIPPER` to `False` then joplin-web will switch of API calls from Rest to command line.
@@ -40,6 +40,10 @@ If you plan to use joplin-terminal and not the WebClipper, in your `.env` file, 
 
 ```python
 python app.py &
+Joplin Web - Starlette powered
+Started server process [10043]
+Waiting for application startup.
+Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 ```
 
 Don't forget to start your joplin editor to be able to reach the webclipper port 

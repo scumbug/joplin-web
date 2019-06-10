@@ -34,7 +34,7 @@ export function createNote (note) {
 
 export function updateNote (note) {
   return new Promise((resolve, reject) => {
-    axios.patch('/api/jw/notes/' + note.id + '/', note)
+    axios.patch('/api/jw/notes/' + note.id, note)
       .then((res) => { resolve(res.data) })
       .catch(error => { reject(error.statusText) })
   })
@@ -42,7 +42,7 @@ export function updateNote (note) {
 
 export function deleteNote (id) {
   return new Promise((resolve, reject) => {
-    axios.delete('/api/jw/notes/' + id + '/')
+    axios.delete('/api/jw/notes/' + id)
       .then((res) => { resolve(res.data) })
       .catch(error => { reject(error.statusText) })
   })
