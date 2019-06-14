@@ -41,11 +41,7 @@ export default {
     ...mapActions(Object.keys(actions))
   },
   computed: {
-    ...mapGetters(Object.keys(getters)),
-
-    getParentFolders () {
-      return this.$store.state.folders.folders.filter(folder => folder.parent_id === '')
-    }
+    ...mapGetters(Object.keys(getters))
   },
   created () {
     this.$store.dispatch('folders/' + types.FOLDER_FETCH_ALL)
