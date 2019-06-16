@@ -213,6 +213,8 @@ export default {
       if (this.$store.state.notes.note.body !== undefined) {
         body = this.$store.state.notes.note.body
       }
+      let re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      body = body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
       return marked(body, { sanitize: true })
     },
     ...mapGetters(Object.keys(getters)),
@@ -239,6 +241,7 @@ export default {
     })
   },
   mounted () {
+    // trick : put the default value of the selected folder id by using $ref defined as property in the form :P
     if (this.parent_id !== undefined || this.parent_id !== 0) {
       this.$refs.treeselect.$emit('select', this.parent_id)
     }
