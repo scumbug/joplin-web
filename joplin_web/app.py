@@ -23,9 +23,6 @@ settings = Config('.env')
 
 app = Starlette()
 app.debug = True
-app.mount('/static', StaticFiles(directory=settings('JOPLIN_RESOURCES')))
-app.mount('/css', StaticFiles(directory="static/css"))
-app.mount('/js', StaticFiles(directory="static/js"))
 
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
 
@@ -214,8 +211,11 @@ async def server_error(request, exc):
     context = {"request": request}
     return templates.TemplateResponse(template, context, status_code=500)
 
-app = Router([
+app = Router(routes=[
     Route('/', endpoint=home, methods=['GET']),
+    Mount('/static', StaticFiles(directory=settings('JOPLIN_RESOURCES'))),
+    Mount('/css', StaticFiles(directory="static/css")),
+    Mount('/js', StaticFiles(directory="static/js")),
     Mount('/api/jw', app=Router([
         Route('/tags/', endpoint=get_tags, methods=['GET']),
         Route('/tags/', endpoint=create_tag, methods=['POST']),
@@ -233,6 +233,7 @@ app = Router([
         ]))
     ]))
 ])
+
 # Bootstrap
 if __name__ == '__main__':
     print('Joplin Web - Starlette powered')

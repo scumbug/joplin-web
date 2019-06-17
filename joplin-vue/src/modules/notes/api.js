@@ -55,8 +55,8 @@ export function fetchNoteTags (note) {
       .then((res) => {
         let tagString = ''
         for (let line in res.data) {
-          let tag = res.data[line]['tag']
-          tagString += tag.title + ', '
+          let tag = res.data[line].title
+          tagString += tag + ', '
         }
         resolve(tagString)
       })
