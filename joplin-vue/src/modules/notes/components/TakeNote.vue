@@ -142,7 +142,7 @@ export default {
 
   data () {
     return {
-      urlResources: '/static',
+      urlResources: '/files',
       updated: -1,
       folders: [],
       errors: new Errors()
@@ -197,12 +197,16 @@ export default {
     updateBody: _.debounce(function (e) {
       // spot image markdown
       // eslint-disable-next-line
-      let re = /\!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      // let re = /\!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      // eslint-disable-next-line
+      let re = /\!\[(.*)\]\(:\/(.*)\)/g
       // image markdown : ![image name.extension](:/resource_id)
       // becomes
       // image markdown : ![image name.extension](http://127.0.0.1:8001/static/resource_id.extension)
       // add the URL to access to the image from the back http service
-      this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
+      // this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
+
+      this.body = e.replace(re, '![$1](' + this.urlResources + '/$2)')
     }, 300),
     ...mapActions(Object.keys(actions))
   },

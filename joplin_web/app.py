@@ -21,8 +21,8 @@ templates = Jinja2Templates(directory="templates")
 settings = Config('.env')
 
 
-app = Starlette()
-app.debug = True
+main_app = Starlette()
+main_app.debug = settings('DEBUG')
 
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
 
@@ -192,7 +192,7 @@ async def create_tag(request):
 
 # HTTP Requests
 # Error Pages
-@app.exception_handler(404)
+@main_app.exception_handler(404)
 async def not_found(request, exc):
     """
     Return an HTTP 404 page.
@@ -202,7 +202,7 @@ async def not_found(request, exc):
     return templates.TemplateResponse(template, context, status_code=404)
 
 
-@app.exception_handler(500)
+@main_app.exception_handler(500)
 async def server_error(request, exc):
     """
     Return an HTTP 500 page.
@@ -211,12 +211,8 @@ async def server_error(request, exc):
     context = {"request": request}
     return templates.TemplateResponse(template, context, status_code=500)
 
-app = Router(routes=[
-    Route('/', endpoint=home, methods=['GET']),
-    Mount('/static', StaticFiles(directory=settings('JOPLIN_RESOURCES'))),
-    Mount('/css', StaticFiles(directory="static/css")),
-    Mount('/js', StaticFiles(directory="static/js")),
-    Mount('/api/jw', app=Router([
+api = Router(routes=[
+    Mount('/jw', app=Router([
         Route('/tags/', endpoint=get_tags, methods=['GET']),
         Route('/tags/', endpoint=create_tag, methods=['POST']),
         Route('/folders/', endpoint=get_folders, methods=['GET']),
@@ -234,7 +230,17 @@ app = Router(routes=[
     ]))
 ])
 
+frontend = Router(routes=[
+    Route('/', endpoint=home, methods=['GET']),
+    Mount('/files', StaticFiles(directory=settings('JOPLIN_RESOURCES'))),
+    Mount('/static/css', StaticFiles(directory="static/css")),
+    Mount('/static/js', StaticFiles(directory="static/js")),
+])
+
+main_app.mount('/api', app=api)
+main_app.mount('/', app=frontend)
+
 # Bootstrap
 if __name__ == '__main__':
     print('Joplin Web - Starlette powered')
-    uvicorn.run(app, host='0.0.0.0', port=settings('HTTP_PORT', cast=int, default=8001))
+    uvicorn.run(main_app, host='0.0.0.0', port=settings('HTTP_PORT', cast=int, default=8001))
