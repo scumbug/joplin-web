@@ -32,8 +32,7 @@ then set at least this parm:
 * the `JOPLIN_WEBCLIPPER_TOKEN` you have in the Webclipper config page in Joplin
 * the `JOPLIN_RESOURCES` to find the files of joplin and being able to load them in the editori 
 
-
-If you plan to use joplin-terminal and not the WebClipper, in your `.env` file, set `API_USE_JOPLIN_WEBCLIPPER` to `False` then joplin-web will switch of API calls from Rest to command line.
+the config file is commented to be able to help you to fill the parameters, like `HTTP_PORT`, `PAGINATOR` or `DEBUG`
 
 
 ### Running
@@ -47,6 +46,7 @@ Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 ```
 
 Don't forget to start your joplin editor to be able to reach the webclipper port 
+
 
 # Joplin-front : The Frontend
 
