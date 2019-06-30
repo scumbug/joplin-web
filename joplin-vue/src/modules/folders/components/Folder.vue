@@ -1,19 +1,19 @@
 <template>
   <b-list-group>
-    <b-list-group-item class="justify-content-between align-items-center"
-      v-for="book in this.getParentFolders"
-      :key="book.id">
-      <a href="#" @click="notesByFolder(book)">{{ book.title }}</a>&nbsp;
-      <b-badge pill>{{ book.nb_notes }}</b-badge>
-      <book :parent_book="book"/>
+    <b-list-group-item class="d-flex justify-content-between align-items-center"
+        v-for="folder in parent_folder"
+        :key="folder.id"
+        href="#" @click="notesByFolder(folder)"
+        >
+        <a href="#" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
+        <b-badge pill variant="primary">{{ folder.nb_notes }}</b-badge>
+        <folder :parent_folder="Object.assign({}, folder.children)"/>
     </b-list-group-item>
   </b-list-group>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-
-import Book from './Book'
 
 import getters from '../getters'
 import actions from '../actions'
@@ -25,12 +25,13 @@ const namespace = 'folders'
 const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 
 export default {
-  data () {
-    return {
-      selection: []
-    }
+  name: 'Folder',
+  props: {
+    parent_folder: Object
   },
-  components: { Book },
+  computed: {
+    ...mapGetters(Object.keys(getters))
+  },
   methods: {
     notesByFolder (folder) {
       let tag = {}
@@ -39,16 +40,7 @@ export default {
       this.$store.dispatch('notes/' + typesNote.NOTE_FETCH_FOLDER, folder)
     },
     ...mapActions(Object.keys(actions))
-  },
-  computed: {
-    ...mapGetters(Object.keys(getters)),
-
-    getParentFolders () {
-      return this.$store.state.folders.folders.filter(folder => folder.parent_id === '')
-    }
-  },
-  created () {
-    this.$store.dispatch('folders/' + types.FOLDER_FETCH_ALL)
   }
 }
+
 </script>

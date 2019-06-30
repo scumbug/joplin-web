@@ -1,7 +1,7 @@
-import Book from './Book'
-import Books from './Books'
+import Folder from './Folder'
+import Folders from './Folders'
 
 export default {
-  Book,
-  Books
+  Folder,
+  Folders
 }

@@ -6,7 +6,12 @@ export const store = {
   namespaced: true,
 
   state: {
-    folder: {},
+    folder: {
+      id: '',
+      title: '',
+      parent_id: '',
+      children: []
+    },
     folders: []
   },
 

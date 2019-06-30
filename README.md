@@ -10,9 +10,7 @@ Because it may happened we need to access to [JoplinApp](https://joplinapp.org) 
 
 * Python >= 3.6
 * [Joplin-API](https://github.com/foxmask/joplin-api)
-* [Django Rest Framework](http://www.django-rest-framework.org/#installation)
-* django-environ
-* requests
+* [starlette](https://starlette.io)
 
 ## Installation 
 
@@ -29,68 +27,26 @@ pip install -r requirements.txt
 
 copy env.sample to .env
 
-then set : 
+then set at least this parm: 
 
-* the `JOPLIN_PATH` to the database 
-* the `JOPLIN_TOKEN` you have in the Webclipper config page in Joplin
+* the `JOPLIN_WEBCLIPPER_TOKEN` you have in the Webclipper config page in Joplin
+* the `JOPLIN_RESOURCES` to find the files of joplin and being able to load them in the editori 
 
 
 If you plan to use joplin-terminal and not the WebClipper, in your `.env` file, set `API_USE_JOPLIN_WEBCLIPPER` to `False` then joplin-web will switch of API calls from Rest to command line.
 
 
-#### Database
-
-```python
-python manage.py migrate
-```
-
-this will add the tables of django but will not change any joplin tables
-
 ### Running
 
 ```python
-python manage.py runserver localhost:8001 &
-```
-if you map another port, you will need to have a look at the front end `vue.config.js` file
-
-don't forget to start your joplin editor to be able to reach the webclipper port 
-
-## Docker 
-
-if you prefer to use docker instead of using the previous virtualenv, set the paramaters from the ` settings` section above
-then
-
-### build
-
-build the image docker
-```
-docker build -t foxmask/joplin-web .
+python app.py &
+Joplin Web - Starlette powered
+Started server process [10043]
+Waiting for application startup.
+Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 ```
 
-### run
-
-then launch it like this
-```
-docker run -it --network host -p 8001:8001 --rm --name foxmask-joplin-web-1 --mount type=bind,source="/home/foxmask/.config/joplin-desktop/database.sqlite",target=/home/foxmask/.config/joplin-desktop/database.sqlite foxmask/joplin-web
-```
-
-explanations :
-
-1) we will need to "mount" a volume to access to the Joplin database from our docker container 
-
-this is the purpose of the ` --mount` parm with `source` and `target` which point, both, to the path `/home/foxmask/.config/joplin-desktop/database.sqlite`
-this is needed by the `.env` file  where you will need to set the JOPLIN_PATH which is in my case `/home/foxmask/.config/joplin-desktop/`
- 
-2) Once the image is built, docker does not even know our local Joplin Webclipper service on the port 41148, so the final trick is to use :
-`--network host` which allow docker to access to the network of the host, and here we go.
- 
-### changing the port 8001 
-
-if you want / need to switch the 8001 for the docker image, you will need to make the following changes :
-
-1) edit the Dockerfile and change 8001 anywhere with your own port
-2) change the param `-p` on the `docker run` command 
-
+Don't forget to start your joplin editor to be able to reach the webclipper port 
 
 # Joplin-front : The Frontend
 

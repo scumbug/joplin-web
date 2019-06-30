@@ -2,10 +2,6 @@ version: '3.2'
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8001
-    volumes:
-      - type: bind
-        source: /home/foxmask/.config/joplin-desktop/database.sqlite
-        target: /home/foxmask/.config/joplin-desktop/database.sqlite
+    command: python app.py
     ports:
       - "8001:8001"

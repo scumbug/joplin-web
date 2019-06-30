@@ -80,10 +80,12 @@
       <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect01"><i class="fas fa-folder-open"></i> Folder</label>
+          <treeselect v-model="parent_id"
+                :multiple="false"
+                :disable-branch-nodes="true"
+                :options="this.getTreeFolders"
+                ref="treeselect"/>
         </div>
-        <b-form-select v-model="parent_id" id="parent_id" name="parent_id" >
-          <option v-for="folder in this.getFolders2" :key="folder.id" :value="folder.id">{{ folder.title }}</option>
-        </b-form-select>
       </div>
       <span class="help is-danger" v-if="errors.has('folder')" v-text="errors.getError('folder')"></span>
     </div>
@@ -120,6 +122,11 @@ import types from '../types'
 
 import { createHelpers } from 'vuex-map-fields'
 
+// import the component
+import Treeselect from '@riophae/vue-treeselect'
+// import the styles
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 import _ from 'lodash'
 let marked = require('marked')
 
@@ -132,15 +139,16 @@ const { mapFields } = createHelpers({
 })
 
 export default {
+
   data () {
     return {
-      urlResources: 'http://127.0.0.1:8001/static',
+      urlResources: '/files',
       updated: -1,
-      folders: {},
+      folders: [],
       errors: new Errors()
     }
   },
-  components: { },
+  components: { Treeselect },
   methods: {
     doNote () {
       if (this.id === undefined || this.id === 0) {
@@ -182,19 +190,23 @@ export default {
         })
     },
     /* delete action pressed */
-    removeNote () {
-      this.$store.dispatch('notes/' + types.NOTE_REMOVE, this.id)
+    removeNote (id) {
+      this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
     },
     // translate markdown to html
     updateBody: _.debounce(function (e) {
       // spot image markdown
       // eslint-disable-next-line
-      let re = /\!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      // let re = /\!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      // eslint-disable-next-line
+      let re = /\!\[(.*)\]\(:\/(.*)\)/g
       // image markdown : ![image name.extension](:/resource_id)
       // becomes
       // image markdown : ![image name.extension](http://127.0.0.1:8001/static/resource_id.extension)
       // add the URL to access to the image from the back http service
-      this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
+      // this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
+
+      this.body = e.replace(re, '![$1](' + this.urlResources + '/$2)')
     }, 300),
     ...mapActions(Object.keys(actions))
   },
@@ -205,19 +217,20 @@ export default {
       if (this.$store.state.notes.note.body !== undefined) {
         body = this.$store.state.notes.note.body
       }
+      let re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      body = body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
       return marked(body, { sanitize: true })
     },
     ...mapGetters(Object.keys(getters)),
 
     // mapFields('namespace' {input name: 'object.field', ... })
-    // this allow to set parent_id with a the id of the object of the object
     ...mapFields('notes', {
       id: 'note.id',
       title: 'note.title',
       body: 'note.body',
       is_todo: 'note.is_todo',
-      parent_id: 'note.parent.id',
-      created_time: 'note.created_time',
+      parent_id: 'note.parent_id',
+      created_time: 'note.user_created_time',
       updated_time: 'note.updated_time',
       todo_completed: 'note.todo_completed',
       todo_due: 'note.todo_due',
@@ -230,6 +243,12 @@ export default {
       source_application: 'note.source_application',
       tag: 'tag'
     })
+  },
+  mounted () {
+    // trick : put the default value of the selected folder id by using $ref defined as property in the form :P
+    if (this.parent_id !== undefined || this.parent_id !== 0) {
+      this.$refs.treeselect.$emit('select', this.parent_id)
+    }
   }
 }
 </script>
