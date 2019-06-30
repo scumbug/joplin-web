@@ -6,8 +6,7 @@
         href="#" @click="notesByFolder(folder)"
         >
         <a href="#" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
-        <b-badge pill>{{ folder.nb_notes }}</b-badge>
-        <b-badge variant="primary" pill>{{ folder.nb_notes }}</b-badge>
+        <b-badge pill variant="primary">{{ folder.nb_notes }}</b-badge>
         <folder :parent_folder="Object.assign({}, folder.children)"/>
     </b-list-group-item>
   </b-list-group>

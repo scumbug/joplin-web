@@ -7,10 +7,10 @@ export const store = {
 
   state: {
     folder: {
-        id: '',
-        title:'',
-        parent_id: '',
-        children: []
+      id: '',
+      title: '',
+      parent_id: '',
+      children: []
     },
     folders: []
   },

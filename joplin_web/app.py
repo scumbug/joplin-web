@@ -64,6 +64,47 @@ async def home(request):
 """
 
 
+async def nb_notes_by_folder(folders):
+    """
+    get the number of notes in each folder
+    :param folders: folders list
+    :return:
+    """
+    data = []
+    # get the number of notes of each folder, if any
+    for folder in folders:
+        nb_notes = 0
+        res_folders_notes = await joplin.get_folders_notes(folder['id'])
+        if len(res_folders_notes.json()):
+            nb_notes = len(res_folders_notes.json())
+        item = folder
+        item['nb_notes'] = nb_notes
+        if 'children' in folder:
+            children = await nb_notes_by_folder(folder['children'])
+            item['children'] = children
+        data.append(item)
+    return data
+
+
+async def nb_notes_by_tag(tags):
+    """
+    get the number of notes in each tag
+    :param tags: tags list
+    :return:
+    """
+    data = []
+    # get the number of notes of each tag, if any
+    for tag in tags:
+        nb_notes = 0
+        res_tags_notes = await joplin.get_tags_notes(tag['id'])
+        if len(res_tags_notes.json()):
+            nb_notes = len(res_tags_notes.json())
+        item = tag
+        item['nb_notes'] = nb_notes
+        data.append(item)
+    return data
+
+
 async def get_folders(request):
     """
     all the folders
@@ -71,7 +112,8 @@ async def get_folders(request):
     :return:
     """
     res = await joplin.get_folders()
-    return JSONResponse(res.json())
+    data = await nb_notes_by_folder(res.json())
+    return JSONResponse(data)
 
 
 async def get_notes(request):
@@ -92,7 +134,8 @@ async def get_tags(request):
     :return:
     """
     res = await joplin.get_tags()
-    return JSONResponse(res.json())
+    data = await nb_notes_by_tag(res.json())
+    return JSONResponse(data)
 
 
 async def get_notesbyfolder(request):

@@ -48,38 +48,6 @@ Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 
 Don't forget to start your joplin editor to be able to reach the webclipper port 
 
-## Docker 
-
-if you prefer to use docker instead of using the previous virtualenv, set the paramaters from the ` settings` section above
-then
-
-### build
-
-build the image docker
-```
-docker build -t foxmask/joplin-web .
-```
-
-### run
-
-then launch it like this
-```
-docker run -it --network host -p 8001:8001 --rm --name foxmask-joplin-web-1 foxmask/joplin-web
-```
-
-explanations :
- 
-1) Once the image is built, docker does not even know our local Joplin Webclipper service on the port 41148, so the final trick is to use :
-`--network host` which allow docker to access to the network of the host, and here we go.
- 
-### changing the port 8001 
-
-if you want / need to switch the 8001 for the docker image, you will need to make the following changes :
-
-1) edit the Dockerfile and change 8001 anywhere with your own port
-2) change the param `-p` on the `docker run` command 
-
-
 # Joplin-front : The Frontend
 
 see [`joplin-web/joplin-vue/README.md`](joplin-vue/README.md) file
