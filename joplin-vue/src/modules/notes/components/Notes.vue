@@ -6,6 +6,7 @@
         <b-list-group>
           <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
             <b-card :title="note.title" v-if="note.is_todo === 0">
+              <tag :parent_folder="Object.assign({}, note.tags)"/>
               <p class="card-text">
                 <small class="text-muted">created: {{ moment(note.user_created_time).format('lll') }}</small>
               </p>
@@ -41,6 +42,8 @@ import getters from '../getters'
 import actions from '../actions'
 import types from '../types'
 
+import Tag from './Tag'
+
 const namespace = 'notes'
 const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
 
@@ -50,7 +53,7 @@ export default {
       page: 0
     }
   },
-  components: { InfiniteLoading },
+  components: { InfiniteLoading, Tag },
   methods: {
     infiniteHandler ($state) {
       let path = '/api/jw/notes/'

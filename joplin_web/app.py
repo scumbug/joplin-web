@@ -48,7 +48,20 @@ async def paginator(request, res):
             payload = res.json()[0:len(res.json())]
         else:
             payload = res.json()[note_per_page * (page - 1):note_per_page * page]
-    return payload
+
+    # get the tag of each note
+    tags_list = []
+    payload_with_tags = []
+    for line in payload:
+        tags = await joplin.get_notes_tags(line['id'])
+        if tags.json():
+            tags_list = []
+            for tag in tags.json():
+                tags_list.append({'id': tag['id'], 'title': tag['title']})
+        if len(tags_list) > 0:
+            line['tags'] = tags_list
+        payload_with_tags.append(line)
+    return payload_with_tags
 
 
 async def home(request):
@@ -179,6 +192,7 @@ async def get_notes_tags(request):
     :return:
     """
     note_id = request.path_params['note_id']
+    print("NOTE ID ?", note_id)
     res = await joplin.get_notes_tags(note_id)
     return JSONResponse(res.json())
 
