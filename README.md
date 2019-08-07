@@ -10,7 +10,7 @@ Because it may happened we need to access to [JoplinApp](https://joplinapp.org) 
 
 * Python >= 3.6
 * [Joplin-API](https://github.com/foxmask/joplin-api)
-* [starlette](https://starlette.io)
+* [starlette](https://www.starlette.io)
 
 ## Installation 
 
