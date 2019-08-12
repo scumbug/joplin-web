@@ -22,7 +22,7 @@ settings = Config('.env')
 
 
 main_app = Starlette()
-main_app.debug = settings('DEBUG')
+main_app.debug = settings('JW_DEBUG')
 
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
 
@@ -34,7 +34,7 @@ async def paginator(request, res):
     :param res:
     :return:
     """
-    note_per_page = settings('PAGINATOR', cast=int, default=20)
+    note_per_page = settings('JW_PAGINATOR', cast=int, default=20)
     page = int(request.query_params['page']) if 'page' in request.query_params else 0
     start = 0
     end = note_per_page
@@ -300,4 +300,4 @@ main_app.mount('/', app=frontend)
 # Bootstrap
 if __name__ == '__main__':
     print('Joplin Web - Starlette powered')
-    uvicorn.run(main_app, host='0.0.0.0', port=settings('HTTP_PORT', cast=int, default=8001))
+    uvicorn.run(main_app, host='0.0.0.0', port=settings('JW_HTTP_PORT', cast=int, default=8001))

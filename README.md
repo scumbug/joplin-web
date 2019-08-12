@@ -47,6 +47,19 @@ Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 
 Don't forget to start your joplin editor to be able to reach the webclipper port 
 
+# Docker
+
+## build the docker image by
+
+```
+docker build -t joplin-web-build . 
+```
+
+## run the image
+```
+docker run -p 8001:8001 joplin-web-build 
+```
+
 
 # Joplin-front : The Frontend
 

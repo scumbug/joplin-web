@@ -4,7 +4,7 @@ RUN mkdir /app
 WORKDIR  /app
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
-COPY . /app
+COPY joplin_web /app
 
 EXPOSE 8001
-CMD ["python", "app.py"]
+CMD ["python", "/app/app.py"]
