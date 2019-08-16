@@ -192,7 +192,6 @@ async def get_notes_tags(request):
     :return:
     """
     note_id = request.path_params['note_id']
-    print("NOTE ID ?", note_id)
     res = await joplin.get_notes_tags(note_id)
     return JSONResponse(res.json())
 

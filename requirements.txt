@@ -1,5 +1,5 @@
-joplin-api==1.4.1
+joplin-api==1.5.0
 aiofiles==0.4.0
 jinja2==2.10.1
-starlette==0.12.2
-uvicorn==0.7.1
+starlette==0.12.8
+uvicorn==0.8.6

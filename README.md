@@ -57,7 +57,7 @@ docker build -t joplin-web-build .
 
 ## run the image
 ```
-docker run -p 8001:8001 joplin-web-build -v JOPLIN_RESOURCES=/path/to/.config/joplin-desktop/resources/
+docker run -p 8001:8001 -v JOPLIN_RESOURCES=/path/to/.config/joplin-desktop/resources/ joplin-web-build
 ```
 
 
