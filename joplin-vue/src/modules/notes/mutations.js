@@ -16,6 +16,7 @@ export const mutations = {
         id: 0,
         parent_id: 0
       },
+      parent_id: undefined,
       is_todo: 0
     }
     state.tag = ''
@@ -53,6 +54,7 @@ export const mutations = {
         id: 0,
         parent_id: 0
       },
+      parent_id: undefined,
       is_todo: 0
     }
   },

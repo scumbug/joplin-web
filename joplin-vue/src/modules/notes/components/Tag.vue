@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span v-for="tag in parent_folder">
+    <span v-for="tag in parent_folder" :key="tag.id">
       <b-badge pill variant="success" >{{ tag.title }}</b-badge>&nbsp;
     </span>
   </span>

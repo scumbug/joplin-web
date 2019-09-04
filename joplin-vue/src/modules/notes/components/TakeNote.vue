@@ -2,6 +2,10 @@
   <form method="post" class="form-horizontal" @submit.prevent="doNote">
     <b-alert v-if="updated == 1" v-model="updated" variant="success" show>Update done</b-alert>
     <b-alert v-if="updated == 0" v-model="updated" variant="danger">Update failed</b-alert>
+    <p v-if="errors.length">
+      <b>Please correct the following error(s):</b>
+      <b-alert variant="danger" v-for="error in errors" :key="error" show>{{ error }}</b-alert>
+    </p>
     <div class="input-group input-group-sm mb-3">
       <b-form-input v-model="title"
                     type="text"
@@ -9,7 +13,6 @@
                     id="title"
                     placeholder="Enter your title">
       </b-form-input>
-      <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
       <div class="input-group-append">
         <b-button v-if="id" size="sm" variant="danger" @click="removeNote(id)"><i class="fas fa-trash"></i> Delete this note ?
         </b-button>
@@ -82,12 +85,11 @@
           <label class="input-group-text" for="inputGroupSelect01"><i class="fas fa-folder-open"></i> Folder</label>
           <treeselect v-model="parent_id"
                 :multiple="false"
-                :disable-branch-nodes="true"
+                :disable-branch-nodes="false"
                 :options="this.getTreeFolders"
                 ref="treeselect"/>
         </div>
       </div>
-      <span class="help is-danger" v-if="errors.has('folder')" v-text="errors.getError('folder')"></span>
     </div>
     <div class="form-group row">
       <div class="col-sm-6">
@@ -98,10 +100,9 @@
                          :max-rows="40"
                          @input="updateBody">
         </b-form-textarea>
-        <span class="help is-danger" v-if="errors.has('body')" v-text="errors.getError('body')"></span><br/>
         <b-alert v-if="updated == 1" v-model="updated" variant="success" show>Update done</b-alert>
         <b-alert v-if="updated == 0" v-model="updated" variant="danger">Update failed</b-alert>
-        <button class="btn btn-primary" :disabled="errors.any()">
+        <button class="btn btn-primary">
           <span><i class="fas fa-save"></i> Save</span>
         </button>
       </div>
@@ -113,7 +114,6 @@
 </template>
 
 <script>
-import Errors from '../../../core/Errors'
 import { createNamespacedHelpers } from 'vuex'
 
 import getters from '../getters'
@@ -128,6 +128,13 @@ import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import _ from 'lodash'
+// required because marked does not deal with sanitze at all
+const createDOMPurify = require('dompurify')
+const { JSDOM } = require('jsdom')
+
+const window = (new JSDOM('')).window
+const DOMPurify = createDOMPurify(window)
+// required because marked does not deal with sanitze at all
 let marked = require('marked')
 
 const namespace = 'notes'
@@ -145,17 +152,34 @@ export default {
       urlResources: '/files',
       updated: -1,
       folders: [],
-      errors: new Errors()
+      errors: []
     }
   },
   components: { Treeselect },
   methods: {
-    doNote () {
-      if (this.id === undefined || this.id === 0) {
-        this.addNote()
-      } else {
-        this.updateNote()
+    doNote (e) {
+      this.errors = []
+
+      if (this.title === '') {
+        this.errors.push('title required.')
       }
+      if (this.parent_id === undefined) {
+        this.errors.push('folder required.')
+      }
+      if (this.body === '') {
+        this.errors.push('body required.')
+      }
+
+      if (!this.errors.length) {
+        if (this.id === undefined || this.id === 0) {
+          this.addNote()
+        } else {
+          this.updateNote()
+        }
+        return true
+      }
+
+      e.preventDefault()
     },
     /* create a note */
     addNote () {
@@ -219,11 +243,10 @@ export default {
       }
       let re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
       body = body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
-      return marked(body, { sanitize: true })
+      let cleanBody = DOMPurify.sanitize(body)
+      return marked(cleanBody)
     },
     ...mapGetters(Object.keys(getters)),
-
-    // mapFields('namespace' {input name: 'object.field', ... })
     ...mapFields('notes', {
       id: 'note.id',
       title: 'note.title',
@@ -245,7 +268,8 @@ export default {
     })
   },
   mounted () {
-    // trick : put the default value of the selected folder id by using $ref defined as property in the form :P
+    // trick : put the default value of the selected folder id by using $ref
+    // defined as property in the form :P
     if (this.parent_id !== undefined || this.parent_id !== 0) {
       this.$refs.treeselect.$emit('select', this.parent_id)
     }
