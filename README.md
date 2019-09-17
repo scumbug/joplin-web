@@ -67,8 +67,7 @@ see [`joplin-web/joplin-vue/README.md`](joplin-vue/README.md) file
 
 ![Joplin web](https://raw.githubusercontent.com/foxmask/joplin-web/master/joplin_web.png)
 
-
-# Joplin-web : Docker
+# Joplin-web : Docker
 
 if you prefer to run the project from docker :
 
