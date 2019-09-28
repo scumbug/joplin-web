@@ -77,7 +77,7 @@ Joplin Web - Starlette powered
 ```
 
 
-# Joplin-front : The Frontend
+# Joplin-Vue : The Frontend
 
 see [`joplin-web/joplin-vue/README.md`](joplin-vue/README.md) file
 

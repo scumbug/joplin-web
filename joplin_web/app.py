@@ -197,7 +197,7 @@ async def get_notes_tags(request):
 
 
 """
-    create/update/delete stuff : note, folder, tag 
+    create/update/delete stuff : note, folder, tag
 """
 
 
@@ -267,6 +267,7 @@ async def server_error(request, exc):
     context = {"request": request}
     return templates.TemplateResponse(template, context, status_code=500)
 
+# The API Routes
 api = Router(routes=[
     Mount('/jw', app=Router([
         Route('/tags/', endpoint=get_tags, methods=['GET']),
@@ -286,6 +287,7 @@ api = Router(routes=[
     ]))
 ])
 
+# The Routes to static content and main page
 frontend = Router(routes=[
     Route('/', endpoint=home, methods=['GET']),
     Mount('/files', StaticFiles(directory=settings('JOPLIN_RESOURCES'))),
@@ -293,6 +295,7 @@ frontend = Router(routes=[
     Mount('/static/js', StaticFiles(directory="static/js")),
 ])
 
+# let's mount each Route
 main_app.mount('/api', app=api)
 main_app.mount('/', app=frontend)
 
