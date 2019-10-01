@@ -44,7 +44,7 @@
             <ul>
               <li v-if="author !== ''">Author: {{ author }}</li>
               <li v-else>Author n/a</li>
-              <li v-if="source_url !== ''">URL: {{ source_url }}</li>
+              <li v-if="source_url !== ''">URL: <a v-bind:href="source_url" v-bind:title="source_url">Go to the source</a></li>
               <li v-else>URL n/a</li>
               <li>Date
                 <ul>
