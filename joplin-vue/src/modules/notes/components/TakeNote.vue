@@ -14,8 +14,10 @@
                     placeholder="Enter your title">
       </b-form-input>
       <div class="input-group-append">
-        <b-button v-if="id" size="sm" variant="danger" @click="removeNote(id)"><i class="fas fa-trash"></i> Delete this note ?
-        </b-button>
+        <div class="mb-1">
+          <b-button v-if="id" size="sm" variant="danger" @click="showMsgRemove(id)"><i class="fas fa-trash"></i> Delete this note ?
+          </b-button>
+        </div>
       </div>
     </div>
     <div class="form-group row">
@@ -211,6 +213,28 @@ export default {
         // eslint-disable-next-line
         .catch((error) => {
           this.updated = 0
+        })
+    },
+    // popup to confirm the deletion
+    showMsgRemove (id) {
+      this.$bvModal.msgBoxConfirm('Please confirm that you want to delete this note.', {
+        title: 'Please Confirm',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      })
+        .then(value => {
+          if (value === true) {
+            this.removeNote(id)
+          }
+        })
+        .catch(err => {
+          console.log(err)
         })
     },
     /* delete action pressed */
