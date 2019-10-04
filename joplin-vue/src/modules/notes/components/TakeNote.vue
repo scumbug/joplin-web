@@ -154,7 +154,6 @@ let md = require('markdown-it')({
                '</code></pre>'
       } catch (__) {}
     }
-
     return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
   }
 })
@@ -268,6 +267,8 @@ export default {
       // this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
 
       this.body = e.replace(re, '![$1](' + this.urlResources + '/$2)')
+      re = /<img(.*)src=":\/(.*)"(.*)\/>/g
+      this.body = e.replace(re, '![$2](' + this.urlResources + '/$2$3)')
     }, 300),
     ...mapActions(Object.keys(actions))
   },
@@ -280,7 +281,9 @@ export default {
         body = this.$store.state.notes.note.body
       }
       let re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
-      return md.render(body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)'))
+      body = body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
+      re = /<img(.*)src=":\/(.*)"(.*)\/>/g
+      return md.render(body.replace(re, '![$2](' + this.urlResources + '/$2$3)'))
     },
     ...mapGetters(Object.keys(getters)),
     ...mapFields('notes', {
