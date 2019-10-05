@@ -17,10 +17,18 @@
       <b-tab title="tasks">
         <b-list-group>
           <a v-for="note in this.getNotes" :key="note.id" href="#" @click="editNote(note)">
-            <b-card :title="note.title" v-if="note.is_todo === 1">
+            <b-card :title="note.title" v-if="note.is_todo === 1 && note.todo_completed === 0" border-variant="warning">
               <p class="card-text" border-variant="light">
                   <small class="text-muted">created: {{ moment(note.user_created_time).format('lll') }}</small>
                   <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
+                  <small v-if="note.todo_completed > 0" class="text-muted"> done: {{ moment(note.todo_completed).format('lll') }}</small>
+              </p>
+            </b-card>
+            <b-card :title="note.title" v-if="note.is_todo === 1 && note.todo_completed > 0" border-variant="success">
+              <p class="card-text" border-variant="light">
+                  <small class="text-muted">created: {{ moment(note.user_created_time).format('lll') }}</small>
+                  <small v-if="note.todo_due > 0" class="text-muted"> due: {{ moment(note.todo_due).format('lll') }}</small>
+                  <small v-if="note.todo_completed > 0" class="text-muted"> done: {{ moment(note.todo_completed).format('lll') }}</small>
               </p>
             </b-card>
           </a>
