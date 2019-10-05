@@ -130,14 +130,6 @@ import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import _ from 'lodash'
-// required because marked does not deal with sanitze at all
-const createDOMPurify = require('dompurify')
-const { JSDOM } = require('jsdom')
-
-const window = (new JSDOM('')).window
-const DOMPurify = createDOMPurify(window)
-// required because marked does not deal with sanitze at all
-let marked = require('marked')
 
 const namespace = 'notes'
 const { mapGetters, mapActions } = createNamespacedHelpers(namespace)
@@ -146,6 +138,26 @@ const { mapFields } = createHelpers({
   getterType: 'getNoteField',
   mutationType: 'updateNoteField'
 })
+
+// markdown it + hightlight
+// https://markdown-it.github.io/markdown-it/
+// https://highlightjs.org/
+let hljs = require('highlight.js')
+
+// Actual default values
+let md = require('markdown-it')({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return '<pre class="hljs"><code>' +
+               hljs.highlight(lang, str, true).value +
+               '</code></pre>'
+      } catch (__) {}
+    }
+    return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
+  }
+})
+// markdown it + hightlight
 
 export default {
 
@@ -255,11 +267,14 @@ export default {
       // this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
 
       this.body = e.replace(re, '![$1](' + this.urlResources + '/$2)')
+      re = /<img(.*)src=":\/(.*)"(.*)\/>/g
+      this.body = e.replace(re, '![$2](' + this.urlResources + '/$2$3)')
     }, 300),
     ...mapActions(Object.keys(actions))
   },
   // load the data of the store into the form for each input
   computed: {
+    // default mode
     compiledMarkdown: function () {
       let body = ''
       if (this.$store.state.notes.note.body !== undefined) {
@@ -267,8 +282,8 @@ export default {
       }
       let re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
       body = body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
-      let cleanBody = DOMPurify.sanitize(body)
-      return marked(cleanBody)
+      re = /<img(.*)src=":\/(.*)"(.*)\/>/g
+      return md.render(body.replace(re, '![$2](' + this.urlResources + '/$2$3)'))
     },
     ...mapGetters(Object.keys(getters)),
     ...mapFields('notes', {
