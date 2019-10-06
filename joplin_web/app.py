@@ -196,6 +196,17 @@ async def get_notes_tags(request):
     return JSONResponse(res.json())
 
 
+async def get_resource(request):
+    """
+    get one resource by its id
+    :param request:
+    :return:
+    """
+    resource_id = request.path_params['resource_id']
+    res = await joplin.get_resource(resource_id)
+    return JSONResponse(res.json())
+
+
 """
     create/update/delete stuff : note, folder, tag
 """
@@ -274,6 +285,9 @@ api = Router(routes=[
         Route('/tags/', endpoint=create_tag, methods=['POST']),
         Route('/folders/', endpoint=get_folders, methods=['GET']),
         Route('/folders/', endpoint=create_folder, methods=['POST']),
+        Mount('/resources', app=Router([
+            Route('/{resource_id}', endpoint=get_resource, methods=['GET'])
+        ])),
         Mount('/notes', app=Router([
             Route('/', endpoint=get_notes, methods=['GET']),
             Route('/', endpoint=create_notes, methods=['POST']),

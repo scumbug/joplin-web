@@ -116,6 +116,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 import { createNamespacedHelpers } from 'vuex'
 
 import getters from '../getters'
@@ -265,14 +267,27 @@ export default {
       // image markdown : ![image name.extension](http://127.0.0.1:8001/static/resource_id.extension)
       // add the URL to access to the image from the back http service
       // this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
-      if (process.env.NODE_MODE === 'development') {
-        this.urlResources += 'http://127.0.0.1:8001'
-      }
       this.body = e.replace(re, '![$1](' + this.urlResources + '/$2)')
       re = /<img(.*)src=":\/(.*)"(.*)\/>/g
       this.body = e.replace(re, '![$2](' + this.urlResources + '/$2$3)')
+      this.getImgBody()
     }, 300),
-    ...mapActions(Object.keys(actions))
+    ...mapActions(Object.keys(actions)),
+    getImgBody () {
+      let re = /<img(.*)src=":\/(.*)"(.*)\/>/g
+      let result = re.exec(this.body)
+      if (result !== null) {
+        let resourceId = result[2]
+        let resourceFile = ''
+        axios.get('/api/jw/resources/' + resourceId)
+          .then((res) => {
+            resourceFile = resourceId + '.' + res.data['file_extension']
+            let replaceIt = '<img$1src="' + this.urlResources + '/' + resourceFile + '"$3/>'
+            this.body = this.body.replace(re, replaceIt)
+          })
+          .catch(error => { console.log(error.statusText) })
+      }
+    }
   },
   // load the data of the store into the form for each input
   computed: {
@@ -284,8 +299,8 @@ export default {
       }
       let re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
       body = body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
-      re = /<img(.*)src=":\/(.*)"(.*)\/>/g
-      return md.render(body.replace(re, '![$2](' + this.urlResources + '/$2$3)'))
+      this.getImgBody()
+      return md.render(body)
     },
     ...mapGetters(Object.keys(getters)),
     ...mapFields('notes', {
@@ -313,6 +328,9 @@ export default {
     // defined as property in the form :P
     if (this.parent_id !== undefined || this.parent_id !== 0) {
       this.$refs.treeselect.$emit('select', this.parent_id)
+    }
+    if (process.env.NODE_ENV === 'development') {
+      this.urlResources = 'http://127.0.0.1:8001/files'
     }
   }
 }
