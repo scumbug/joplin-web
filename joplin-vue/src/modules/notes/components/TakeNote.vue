@@ -265,7 +265,9 @@ export default {
       // image markdown : ![image name.extension](http://127.0.0.1:8001/static/resource_id.extension)
       // add the URL to access to the image from the back http service
       // this.body = e.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
-
+      if (process.env.NODE_MODE === 'development') {
+        this.urlResources += 'http://127.0.0.1:8001'
+      }
       this.body = e.replace(re, '![$1](' + this.urlResources + '/$2)')
       re = /<img(.*)src=":\/(.*)"(.*)\/>/g
       this.body = e.replace(re, '![$2](' + this.urlResources + '/$2$3)')
