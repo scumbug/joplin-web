@@ -207,6 +207,16 @@ async def get_resource(request):
     return JSONResponse(res.json())
 
 
+async def get_notes_resources(request):
+    """
+    get the resources related to the note id
+    :param request:
+    :return:
+    """
+    note_id = request.path_params['note_id']
+    res = await joplin.get_notes_resources(note_id)
+    return JSONResponse(res.json())
+
 """
     create/update/delete stuff : note, folder, tag
 """
@@ -295,6 +305,7 @@ api = Router(routes=[
             Route('/{note_id}', endpoint=update_note, methods=['PATCH']),
             Route('/{note_id}', endpoint=delete_note, methods=['DELETE']),
             Route('/{note_id}/tags/', endpoint=get_notes_tags, methods=['GET']),
+            Route('/{note_id}/resources/', endpoint=get_notes_resources, methods=['GET']),
             Route('/folder/{folder}', endpoint=get_notesbyfolder, methods=['GET']),
             Route('/tag/{tag_id}', endpoint=get_notesbytag, methods=['GET']),
         ]))
