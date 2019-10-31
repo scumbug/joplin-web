@@ -1,6 +1,6 @@
 # Joplin-Vue : The Front End of the project
 
-## Requirements 
+## Requirements
 
 * [VueJS](https://vuejs.org)2 with :
   * Vuex
@@ -10,7 +10,6 @@
   * dompurify
   * jsdom
   * js-cookie
-  * vue-infinite-loading
   * bootstrap-vue
 
 ## Project setup
@@ -38,9 +37,9 @@ npm run test
 npm run lint
 ```
 
-## Joplin-web : The BackEnd 
+## Joplin-web : The BackEnd
 
-if you want to change the port of your back edit vue.config.js and change 
+if you want to change the port of your back edit vue.config.js and change
 ```
 target: 'http://127.0.0.1:8001'
 ```
@@ -52,7 +51,7 @@ see [`joplin-web/joplin_web/README.md`](../README.md) file
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
-## Project structure 
+## Project structure
 
 - joplin-vue
   - src
@@ -66,7 +65,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
           - Note
           - Notes
           - Tag
-          - TakeNote 
+          - TakeNote
       - tags (list of tags)
         - components
           - Tags
