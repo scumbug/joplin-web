@@ -13,8 +13,9 @@
               small
             >
               &nbsp;<template v-slot:cell(title)="data">
-                <a href="#" @click="editNote(data.item)">{{ data.item.title }}</a>
+                <div><a href="#" @click="editNote(data.item)">{{ data.item.title }}</a></div>
                 <tag :parent_folder="Object.assign({}, data.item.tag)"/>
+                <div class="text-sm text-muted font-italic" style="font-size: 0.7rem">Created: {{ moment(data.item.created_time).format('llll') }} - Updated: {{ moment(data.item.updated_time).format('llll') }}</div>
               </template>
             </b-table>
             <b-pagination
@@ -33,15 +34,19 @@
               :per-page="perPage"
               :current-page="currentPageTasks"
               :fields='fields'
+              :tbody-tr-class='rowClass'
               small
             >
               &nbsp;<template v-slot:cell(title)="data">
-                <a href="#" @click="editNote(data.item)">{{ data.item.title }}</a>
+                <div><a href="#" @click="editNote(data.item)">{{ data.item.title }}</a></div>
                 <tag :parent_folder="Object.assign({}, data.item.tag)"/>
+                <div v-if="data.item.todo_completed > 0" class="text-sm text-muted font-italic" style="font-size: 0.7rem">Completed: {{ moment(data.item.completed).format('llll') }}</div>
+                <div v-if="data.item.todo_due > 0" class="text-sm text-muted font-italic" style="font-size: 0.7rem">Due: {{ moment(data.item.todo_due).format('llll') }}</div>
+                <div class="text-sm text-muted font-italic" style="font-size: 0.7rem">Created: {{ moment(data.item.created_time).format('llll') }} - Updated: {{ moment(data.item.updated_time).format('llll') }}</div>
               </template>
             </b-table>
             <b-pagination
-              v-model="currentPage"
+              v-model="currentPageTasks"
               :total-rows="tasks.length"
               :per-page="perPage"
               aria-controls="my-tasks"
@@ -90,7 +95,11 @@ export default {
     delNote (id) {
       this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
     },
-    ...mapActions(Object.keys(actions))
+    ...mapActions(Object.keys(actions)),
+    rowClass (item, type) {
+      if (!item) return
+      if (item.todo_completed > 0) return 'table-secondary'
+    }
   },
   computed: {
     ...mapGetters(Object.keys(getters)),
