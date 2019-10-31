@@ -15,10 +15,6 @@
         <b-navbar-nav class="ml-auto">
           <b-btn size="sm" class="my-2 my-sm-0" @click="newNote()" variant="outline-primary"><i class="fas fa-plus-circle"></i> New note</b-btn>
           &nbsp;
-          <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-2" type="text" v-model="q" @keyup.enter="searchNote()" placeholder="Search"/>
-            <b-button size="sm" class="my-2 my-sm-0" variant="outline-success" type="submit">Search</b-button>
-          </b-nav-form>
         </b-navbar-nav>
 
       </b-collapse>

@@ -1,16 +1,61 @@
 <template>
   <div>
     <h5 v-html="this.title"></h5>
+    <b-btn v-b-toggle.filterAndSearch variant="primary" size="sm"><i class="fas fa-search"></i> Search and Filter</b-btn>
+    <b-collapse id="filterAndSearch" class="mt-2">
+      <b-form-group
+        label="Sort"
+        label-cols-sm="3"
+        label-size="sm"
+        label-for="sortBySelect"
+        class="mb-0"
+      >
+        <b-input-group size="sm">
+          <b-form-select v-model="sortBy" id="sortBySelect" :options="sortOptions" class="w-75">
+            <template v-slot:first>
+              <option value="">-- none --</option>
+            </template>
+          </b-form-select>
+          <b-form-select v-model="sortDesc" size="sm" :disabled="!sortBy" class="w-25">
+            <option :value="false">Asc</option>
+            <option :value="true">Desc</option>
+          </b-form-select>
+        </b-input-group>
+      </b-form-group>
+      <b-form-group
+        label="Filter"
+        label-cols-sm="3"
+        label-size="sm"
+        label-for="filterInput"
+        class="mb-0"
+      >
+        <b-input-group size="sm">
+          <b-form-input
+            v-model="filter"
+            type="search"
+            id="filterInput"
+            placeholder="Type to Search"
+          ></b-form-input>
+          <b-input-group-append>
+            <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+          </b-input-group-append>
+        </b-input-group>
+      </b-form-group>
+    </b-collapse>
     <b-tabs>
       <b-tab title="notes" active>
         <div class="overflow-auto">
             <b-table
-              id="my-notes"
-              :items="notes"
-              :per-page="perPage"
-              :current-page="currentPage"
-              :fields='fields'
               small
+              id="my-notes"
+              :items='notes'
+              :per-page='perPage'
+              :current-page='currentPage'
+              :fields='fields'
+              :filter='filter'
+              :sort-by.sync="sortBy"
+              :sort-desc.sync="sortDesc"
+              @filtered="onFiltered"
             >
               &nbsp;<template v-slot:cell(title)="data">
                 <div><a href="#" @click="editNote(data.item)">{{ data.item.title }}</a></div>
@@ -80,9 +125,18 @@ export default {
       page: 0,
       currentPage: 1,
       currentPageTasks: 1,
-      perPage: 20,
+      perPage: 10,
       fields: [
         { key: 'title', label: 'Note', sortable: true }
+      ],
+      sortBy: 'created_time',
+      sortDesc: true,
+      filter: '',
+      fieldsToSort: [
+        { key: 'title', label: 'Title', sortable: true },
+        { key: 'created_time', label: 'Created Date', sortable: true },
+        { key: 'updated_time', label: 'Updated Date', sortable: true },
+        { key: 'todo_due', label: 'Due Date', sortable: true }
       ]
     }
   },
@@ -94,6 +148,11 @@ export default {
     },
     delNote (id) {
       this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
+    },
+    onFiltered (filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
     },
     ...mapActions(Object.keys(actions)),
     rowClass (item, type) {
@@ -120,6 +179,14 @@ export default {
     /* only get the tasks */
     tasks () {
       return this.$store.state.notes.notes.filter(note => note.is_todo === 1)
+    },
+    sortOptions() {
+      // Create an options list from our fields
+      return this.fieldsToSort
+        .filter(f => f.sortable)
+        .map(f => {
+          return { text: f.label, value: f.key }
+        })
     },
     ...mapFields('notes', {
       id: 'note.id',
