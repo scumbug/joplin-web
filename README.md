@@ -103,3 +103,7 @@ Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 if you prefer to run the project from docker :
 
 see [joplin-web/docker.md](docker.md) for details
+
+# System settings
+
+see [joplin-web/system.md](system.md) for details

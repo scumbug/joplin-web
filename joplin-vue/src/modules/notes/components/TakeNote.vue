@@ -330,14 +330,14 @@ export default {
       source_application: 'note.source_application'
     }),
     tag: {
-      get() {
+      get () {
         let tags = []
         for (let tag in this.$store.state.notes.tag) {
           tags.push(this.$store.state.notes.tag[tag].id)
         }
         return tags
       },
-      set() {
+      set () {
       }
     }
   },
