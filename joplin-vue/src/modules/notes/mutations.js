@@ -19,7 +19,10 @@ export const mutations = {
       parent_id: undefined,
       is_todo: 0
     }
-    state.tag = ''
+    state.tag = {
+      id: 0,
+      title: ''
+    }
   },
 
   [types.NOTE_SET_ALL]: (state, notes) => {

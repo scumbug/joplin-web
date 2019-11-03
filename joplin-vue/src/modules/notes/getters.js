@@ -5,7 +5,7 @@ const { getNoteField } = createHelpers({
   getterType: 'getNoteField'
 })
 
-function getTreeFoldersChildren (children) {
+function getTreeChildren (children) {
   let folders = children
   let myFolders = []
   for (let folder in folders) {
@@ -14,7 +14,7 @@ function getTreeFoldersChildren (children) {
       'label': folders[folder].title
     }
     if (folders[folder].children !== undefined) {
-      myFolder['children'] = getTreeFoldersChildren(folders[folder].children)
+      myFolder['children'] = getTreeChildren(folders[folder].children)
     }
     myFolders.push(myFolder)
   }
@@ -38,11 +38,26 @@ export const getters = {
         'label': folders[folder].title
       }
       if (folders[folder].children !== undefined) {
-        myFolder['children'] = getTreeFoldersChildren(folders[folder].children)
+        myFolder['children'] = getTreeChildren(folders[folder].children)
       }
       myFolders.push(myFolder)
     }
     return myFolders
+  },
+  getTags2 (state, getters, rootState, rootGetters) {
+    return rootGetters['tags/getTags']
+  },
+  getTreeTags (state, getters, rootState, rootGetters) {
+    let tags = getters.getTags2
+    let myTags = []
+    for (let tag in tags) {
+      let myTag = {
+        'id': tags[tag].id,
+        'label': tags[tag].title
+      }
+      myTags.push(myTag)
+    }
+    return myTags
   },
 
   getNoteField

@@ -52,14 +52,7 @@ export function fetchNoteTags (note) {
   return new Promise((resolve, reject) => {
     // this will trigger a retrieval of the tags of this note
     axios.get('/api/jw/notes/' + note.id + '/tags/')
-      .then((res) => {
-        let tagString = ''
-        for (let line in res.data) {
-          let tag = res.data[line].title
-          tagString += tag + ', '
-        }
-        resolve(tagString)
-      })
+      .then((res) => { resolve(res.data) })
       .catch(error => { reject(error.statusText) })
   })
 }

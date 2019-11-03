@@ -27,6 +27,15 @@ main_app.debug = settings('JW_DEBUG')
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
 
 
+async def home(request):
+    """
+        homepage
+    """
+    template = "index.html"
+    context = {"request": request}
+    return templates.TemplateResponse(template, context)
+
+
 async def tag_for_notes(data):
     """
     alter the original data to add the tag related to the note
@@ -77,15 +86,6 @@ async def paginator(request, res):
             line['tags'] = tags_list
         payload_with_tags.append(line)
     return payload_with_tags
-
-
-async def home(request):
-    """
-        homepage
-    """
-    template = "index.html"
-    context = {"request": request}
-    return templates.TemplateResponse(template, context)
 
 """
     get stuff : folders, notes, tags
@@ -174,7 +174,6 @@ async def get_notesbyfolder(request):
     """
     folder = request.path_params['folder']
     res = await joplin.get_folders_notes(folder)
-    # payload = await paginator(request, res)
     payload = await tag_for_notes(res)
     return JSONResponse(payload)
 
@@ -193,19 +192,7 @@ async def get_notesbytag(request):
         new_note = note
         new_note['tag'] = tag.json() if tag else ''
         payload.append(new_note)
-    # return JSONResponse(res.json())
     return JSONResponse(payload)
-
-
-async def get_note(request):
-    """
-    get one note by its id
-    :param request:
-    :return:
-    """
-    note_id = request.path_params['note_id']
-    res = await joplin.get_note(note_id)
-    return JSONResponse(res.json())
 
 
 async def get_notes_tags(request):
@@ -324,7 +311,6 @@ api = Router(routes=[
         Mount('/notes', app=Router([
             Route('/', endpoint=get_notes, methods=['GET']),
             Route('/', endpoint=create_notes, methods=['POST']),
-            Route('/{note_id}', endpoint=get_note, methods=['GET']),
             Route('/{note_id}', endpoint=update_note, methods=['PATCH']),
             Route('/{note_id}', endpoint=delete_note, methods=['DELETE']),
             Route('/{note_id}/tags/', endpoint=get_notes_tags, methods=['GET']),
@@ -349,5 +335,5 @@ main_app.mount('/', app=frontend)
 
 # Bootstrap
 if __name__ == '__main__':
-    print('Joplin Web - Starlette powered')
+    print('Joplin Web Companion - Starlette powered')
     uvicorn.run(main_app, host='0.0.0.0', port=settings('JW_HTTP_PORT', cast=int, default=8001))

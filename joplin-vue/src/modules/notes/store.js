@@ -28,7 +28,7 @@ export const store = {
       source: '',
       source_application: ''
     },
-    tag: '',
+    tag: [],
     notes: []
   },
 

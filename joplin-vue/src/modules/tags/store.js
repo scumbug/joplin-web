@@ -6,7 +6,10 @@ export const store = {
   namespaced: true,
 
   state: {
-    tag: {},
+    tag: {
+      id: '',
+      title: ''
+    },
     tags: []
   },
 

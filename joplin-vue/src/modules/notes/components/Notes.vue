@@ -143,8 +143,8 @@ export default {
   components: { Tag },
   methods: {
     editNote (note) {
-      this.$store.dispatch('notes/' + types.NOTETAG_SET, note)
       this.$store.dispatch('notes/' + types.NOTE_SET, note)
+      this.$store.dispatch('notes/' + types.NOTETAG_SET, note)
     },
     delNote (id) {
       this.$store.dispatch('notes/' + types.NOTE_REMOVE, id)
@@ -180,7 +180,7 @@ export default {
     tasks () {
       return this.$store.state.notes.notes.filter(note => note.is_todo === 1)
     },
-    sortOptions() {
+    sortOptions () {
       // Create an options list from our fields
       return this.fieldsToSort
         .filter(f => f.sortable)
@@ -197,7 +197,7 @@ export default {
       todo_completed: 'note.todo_completed',
       todo_due: 'note.todo_due',
       author: 'note.author',
-      tag: 'tag'
+      tag: 'tag.id'
     })
   },
   mounted () {

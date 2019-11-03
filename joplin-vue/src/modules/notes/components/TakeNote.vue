@@ -30,12 +30,20 @@
       </label>
       </div>
       <div class="col-sm-6">
-        <b-form-input v-model="tag"
-                      type="text"
-                      name="tag"
-                      id="tag"
-                      placeholder="tags, tags">
-        </b-form-input>
+        <div class="form-group">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect02">
+                <i class="fas fa-tag"></i> Tag
+              </label>
+              <treeselect v-model="tag"
+                    :multiple="true"
+                    :disable-branch-nodes="true"
+                    :options="this.getTreeTags"
+                    ref="tagtreeselect"/>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-sm-4">
         <div class="input-group-prepend">
@@ -319,9 +327,19 @@ export default {
       longitude: 'note.longitude',
       altitude: 'note.altitude',
       source: 'note.source',
-      source_application: 'note.source_application',
-      tag: 'tag'
-    })
+      source_application: 'note.source_application'
+    }),
+    tag: {
+      get() {
+        let tags = []
+        for (let tag in this.$store.state.notes.tag) {
+          tags.push(this.$store.state.notes.tag[tag].id)
+        }
+        return tags
+      },
+      set() {
+      }
+    }
   },
   mounted () {
     // trick : put the default value of the selected folder id by using $ref
