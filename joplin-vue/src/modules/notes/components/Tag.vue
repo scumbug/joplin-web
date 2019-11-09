@@ -1,10 +1,11 @@
 <template>
   <div>
+
     <b-button v-for="tag in parent_folder" :key="tag.id"
     variant="outline-success"
     size="sm"
     href="#" title="display notes by this tag"
-    @click="notesByTag(tag)">{{ tag.title }}</b-button>
+    @click="notesByTag(tag)"><i class="fas fa-tag"></i> {{ tag.title }}</b-button>
   </div>
 </template>
 

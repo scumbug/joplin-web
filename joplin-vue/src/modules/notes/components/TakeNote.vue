@@ -6,17 +6,19 @@
       <b>Please correct the following error(s):</b>
       <b-alert variant="danger" v-for="error in errors" :key="error" show>{{ error }}</b-alert>
     </p>
-    <div class="input-group input-group-sm mb-3">
-      <b-form-input v-model="title"
-                    type="text"
-                    name="title"
-                    id="title"
-                    placeholder="Enter your title">
-      </b-form-input>
-      <div class="input-group-append">
-        <div class="mb-1">
-          <b-button v-if="id" size="sm" variant="danger" @click="showMsgRemove(id)"><i class="fas fa-trash"></i> Delete this note ?
-          </b-button>
+    <div class="form-group row">
+      <div class="input-group input-group-sm mb-3">
+        <b-form-input v-model="title"
+                      type="text"
+                      name="title"
+                      id="title"
+                      placeholder="Enter your title">
+        </b-form-input>
+        <div class="input-group-append">
+          <div class="mb-1">
+            <b-button v-if="id" size="sm" variant="danger" @click="showMsgRemove(id)"><i class="fas fa-trash"></i> Delete this note ?
+            </b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -29,7 +31,11 @@
         <input name="is_todo" id="is_todo" v-model="is_todo" type="checkbox" autocomplete="on"/>
       </label>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-2">
+        <b-btn size="sm" variant="secondary"><i class="fas fa-calendar"></i></b-btn>
+        <span v-if="todo_due"> {{ moment(todo_due).format('MM/DD/YY h:mm') }}</span>
+      </div>
+      <div class="col-sm-7">
         <div class="form-group">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
@@ -45,9 +51,8 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-1">
         <div class="input-group-prepend">
-          <span class="text-muted">Created: {{ moment(created_time).format('lll') }}</span>&nbsp;
           <b-btn id="note-info" size="sm" variant="secondary"><i class="fas fa-info-circle"></i></b-btn>
           <b-popover target="note-info" triggers="hover focus">
             <template slot="title">Note details</template>

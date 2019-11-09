@@ -27,6 +27,20 @@ main_app.debug = settings('JW_DEBUG')
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
 
 
+async def tags_to_string(my_tags):
+    """
+
+    :param my_tags:
+    :return:
+    """
+    tags = ''
+    for tag in my_tags:
+        tags += tag
+        if len(my_tags) > 1:
+            tags += ','
+    return tags
+
+
 async def home(request):
     """
         homepage
@@ -249,7 +263,10 @@ async def update_note(request):
     title = payload['title']
     body = payload['body']
     parent_id = payload['parent_id']
-    res = await joplin.update_note(note_id=note_id, title=title, body=body, parent_id=parent_id)
+    kwargs = {'is_todo': payload['is_todo'],
+              'tags': await tags_to_string(payload['tag'])}
+    print(kwargs)
+    res = await joplin.update_note(note_id=note_id, title=title, body=body, parent_id=parent_id, **kwargs)
     return JSONResponse(res.json())
 
 
