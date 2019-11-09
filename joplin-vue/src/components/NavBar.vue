@@ -8,7 +8,11 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="#" @click="getNotes()">Home</b-nav-item>
+          <b-link :to="{ path: '/home' }"
+              replace
+              v-slot="{ href, route, navigate, isActive, isExactActive }">
+            <a :href="href" @click="getNotes()">Home</a>
+          </b-link>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -35,9 +39,6 @@ export default {
     }
   },
   methods: {
-    searchNote () {
-      // this.emit('searchNote', this.q)
-    },
     getNotes () {
       this.$store.dispatch('folders/' + typesFolders.FOLDER_FETCH_ALL)
       this.$store.dispatch('notes/' + typesNotes.NOTE_FETCH_ALL)

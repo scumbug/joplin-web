@@ -1,10 +1,14 @@
 <template>
   <b-list-group>
     <b-list-group-item class="d-flex justify-content-between align-items-center"
-       v-for="tag in this.getTags" :key="tag.id"
-       href="#" @click="notesByTag(tag)"
-      >{{ tag.title }}
-      <b-badge pill>{{ tag.nb_notes }}</b-badge>
+       v-for="tag in this.getTags"
+       :key="tag.id">
+      <b-link :to="{ name: 'myTag', params: { id: tag.title } }"
+          replace
+          v-slot="{ href, route, navigate, isActive, isExactActive }">
+        <a :href="href" @click="notesByTag(tag)">{{ tag.title }}</a>&nbsp;
+        <b-badge pill varian='primary'>{{ tag.nb_notes }}</b-badge>
+      </b-link>
     </b-list-group-item>
   </b-list-group>
 </template>

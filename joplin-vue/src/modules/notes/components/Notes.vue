@@ -58,7 +58,11 @@
               @filtered="onFiltered"
             >
               &nbsp;<template v-slot:cell(title)="data">
-                <div><a href="#" @click="editNote(data.item)">{{ data.item.title }}</a></div>
+                <b-link :to="{ name: 'myNote', params: { id: data.item.title } }"
+                    replace
+                    v-slot="{ href, route, navigate, isActive, isExactActive }">
+                  <a :href="href" @click="editNote(data.item)">{{ data.item.title }}</a>
+                </b-link>
                 <tag :parent_folder="Object.assign({}, data.item.tag)"/>
                 <div class="text-sm text-muted font-italic" style="font-size: 0.7rem">Created: {{ moment(data.item.created_time).format('llll') }} - Updated: {{ moment(data.item.updated_time).format('llll') }}</div>
               </template>
@@ -83,7 +87,11 @@
               small
             >
               &nbsp;<template v-slot:cell(title)="data">
-                <div><a href="#" @click="editNote(data.item)">{{ data.item.title }}</a></div>
+                <b-link :to="{ name: 'myNote', params: { id: data.item.title } }"
+                    replace
+                    v-slot="{ href, route, navigate, isActive, isExactActive }">
+                  <a :href="href" @click="editNote(data.item)">{{ data.item.title }}</a>
+                </b-link>
                 <tag :parent_folder="Object.assign({}, data.item.tag)"/>
                 <div v-if="data.item.todo_completed > 0" class="text-sm text-muted font-italic" style="font-size: 0.7rem">Completed: {{ moment(data.item.completed).format('llll') }}</div>
                 <div v-if="data.item.todo_due > 0" class="text-sm text-muted font-italic" style="font-size: 0.7rem">Due: {{ moment(data.item.todo_due).format('llll') }}</div>

@@ -1,13 +1,15 @@
 <template>
   <b-list-group>
-    <b-list-group-item class="d-flex justify-content-between align-items-center"
-        v-for="folder in parent_folder"
-        :key="folder.id"
-        href="#" @click="notesByFolder(folder)"
-        >
-        <a href="#" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
-        <b-badge pill variant="primary">{{ folder.nb_notes }}</b-badge>
-        <folder :parent_folder="Object.assign({}, folder.children)"/>
+    <b-list-group-item class="d-flew justify-content-between align-items-center"
+      v-for="folder in parent_folder"
+      :key="folder.id">
+      <b-link :to="{ name: 'myFolder', params: { id: folder.title } }"
+          replace
+          v-slot="{ href, route, navigate, isActive, isExactActive }">
+        <a :href="href" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
+        <b-badge pill variant='primary'>{{ folder.nb_notes }}</b-badge>
+      </b-link>
+      <folder :parent_folder="Object.assign({}, folder.children)"/>
     </b-list-group-item>
   </b-list-group>
 </template>

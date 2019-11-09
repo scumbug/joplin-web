@@ -3,8 +3,14 @@
     <b-list-group-item class="justify-content-between align-items-center"
       v-for="folder in this.getFolders"
       :key="folder.id">
-      <a href="#" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
-      <b-badge pill>{{ folder.nb_notes }}</b-badge>
+      <b-link :to="{ name: 'myFolder', params: { id: folder.title } }"
+          replace
+          v-slot="{ href, route, navigate, isActive, isExactActive }">
+        <a :href="href" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
+        <b-badge pill>{{ folder.nb_notes }}</b-badge>
+      </b-link>
+      <!-- a href="#" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
+      <b-badge pill>{{ folder.nb_notes }}</b-badge -->
       <folder :parent_folder="Object.assign({}, folder.children)"/>
     </b-list-group-item>
   </b-list-group>
