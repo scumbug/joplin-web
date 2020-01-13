@@ -2,6 +2,9 @@
 
 if you prefer to run the project from docker follow that steps:
 
+## before building 
+
+Do not forget to setup the parms in the `.env` file describes in the `settings` paragraph of the [README.md](README.md#settings)
 
 ## build the docker image by
 

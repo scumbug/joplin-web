@@ -22,7 +22,7 @@ settings = Config('.env')
 
 
 main_app = Starlette()
-main_app.debug = settings('JW_DEBUG')
+main_app.debug = settings('JW_DEBUG', default=False)
 
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
 
