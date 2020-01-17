@@ -16,7 +16,20 @@
 ```
 npm install
 ```
+you can set the environment variable `JW_BASE_URL` to allow providing the application else where instead of "/"
+for example : 
+```
+20:31:02 [foxmask@foxmask:~/Projects/joplin-web] $ export JW_BASE_URL='/joplin/'
+ INFO  Starting development server...
+ 98% after emitting CopyPlugin                                                    
 
+ DONE  Compiled successfully in 5070ms                                                                                                                                                                                              8:31:46 PM
+
+ 
+  App running at:
+  - Local:   http://localhost:8080/joplin/ 
+  - Network: http://192.168.1.23:8080/joplin/
+```
 ### Compiles and hot-reloads for development
 ```
 npm run serve
