@@ -1,7 +1,7 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production'
+  publicPath: process.env.NODE_ENV !== 'production'
     ? '/static/'
-    : process.env.JW_BASE_URL,
+    : process.env.JW_BASE_URL + '/static',
   outputDir: '../joplin_web/static',
   indexPath: '../templates/index.html',
   filenameHashing: false,

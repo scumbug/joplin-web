@@ -261,7 +261,7 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
         })
     },
     /* delete action pressed */
@@ -298,7 +298,9 @@ export default {
             let replaceIt = '<img$1src="' + this.urlResources + '/' + resourceFile + '"$3/>'
             this.body = this.body.replace(re, replaceIt)
           })
-          .catch(error => { console.log(error.statusText) })
+          .catch(error => {
+            //console.log(error.statusText)
+          })
       }
     }
   },

@@ -37,6 +37,7 @@ then set at least this parm:
 
 * the `JOPLIN_WEBCLIPPER_TOKEN` you have in the Webclipper config page in Joplin
 * the `JOPLIN_RESOURCES` to find the files of joplin and being able to load them in the editori
+* the `JW_BASE_URL` to set the base of the application eg  set it to `/joplin/` to move the URL from `/` to  `/joplin/`
 
 the config file is commented to be able to help you to fill the parameters, like `HTTP_PORT`, `PAGINATOR` or `DEBUG`
 

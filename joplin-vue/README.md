@@ -36,7 +36,10 @@ npm run serve
 ```
 
 ### Compiles and minifies for production
+
+enter `export JW_BASE_URL='/joplin/'` to build the `index.hml` with the right path of the js/css path access
 ```
+export JW_BASE_URL='/'   
 npm run build
 ```
 

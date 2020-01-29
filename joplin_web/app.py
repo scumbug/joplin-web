@@ -337,13 +337,14 @@ api = Router(routes=[
         ]))
     ]))
 ])
-
+JW_BASE_URL = settings('JW_BASE_URL', default='/')
+print(JW_BASE_URL)
 # The Routes to static content and main page
 frontend = Router(routes=[
     Route('/', endpoint=home, methods=['GET']),
     Mount('/files', StaticFiles(directory=settings('JOPLIN_RESOURCES'))),
-    Mount('/static/css', StaticFiles(directory="static/css")),
-    Mount('/static/js', StaticFiles(directory="static/js")),
+    Mount(JW_BASE_URL + 'static/css', StaticFiles(directory="static/css")),
+    Mount(JW_BASE_URL + 'static/js', StaticFiles(directory="static/js")),
 ])
 
 # let's mount each Route
