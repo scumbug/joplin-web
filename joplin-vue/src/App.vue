@@ -78,16 +78,16 @@ export default {
   },
   methods: {
     newFolder (folder) {
-      let payload = {
-        'title': this.folder
+      const payload = {
+        title: this.folder
       }
       this.$store.dispatch('folders/' + typesFolders.FOLDER_CREATE, payload)
       this.$store.dispatch('folders/' + typesFolders.FOLDER_FETCH_ALL)
       this.folder = ''
     },
     newTag (tag) {
-      let payload = {
-        'title': this.tag
+      const payload = {
+        title: this.tag
       }
       this.$store.dispatch('tags/' + typesTags.TAG_CREATE, payload)
       this.$store.dispatch('tags/' + typesTags.TAG_FETCH_ALL)

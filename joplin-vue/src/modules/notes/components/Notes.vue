@@ -60,7 +60,7 @@
               &nbsp;<template v-slot:cell(title)="data">
                 <b-link :to="{ name: 'myNote', params: { id: data.item.title } }"
                     replace
-                    v-slot="{ href, route, navigate, isActive, isExactActive }">
+                    v-slot="{ href }">
                   <a :href="href" @click="editNote(data.item)">{{ data.item.title }}</a>
                 </b-link>
                 <tag :parent_folder="Object.assign({}, data.item.tag)"/>
@@ -89,7 +89,7 @@
               &nbsp;<template v-slot:cell(title)="data">
                 <b-link :to="{ name: 'myNote', params: { id: data.item.title } }"
                     replace
-                    v-slot="{ href, route, navigate, isActive, isExactActive }">
+                    v-slot="{ href }">
                   <a :href="href" @click="editNote(data.item)">{{ data.item.title }}</a>
                 </b-link>
                 <tag :parent_folder="Object.assign({}, data.item.tag)"/>

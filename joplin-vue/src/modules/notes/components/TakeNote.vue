@@ -157,10 +157,10 @@ const { mapFields } = createHelpers({
 // markdown it + hightlight
 // https://markdown-it.github.io/markdown-it/
 // https://highlightjs.org/
-let hljs = require('highlight.js')
+const hljs = require('highlight.js')
 
 // Actual default values
-let md = require('markdown-it')({
+const md = require('markdown-it')({
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
@@ -212,25 +212,25 @@ export default {
     },
     /* create a note */
     addNote () {
-      let payload = {
-        'title': this.title,
-        'body': this.body,
-        'parent_id': this.parent_id,
-        'is_todo': (this.is_todo ? 1 : 0),
-        'tag': this.tag
+      const payload = {
+        title: this.title,
+        body: this.body,
+        parent_id: this.parent_id,
+        is_todo: (this.is_todo ? 1 : 0),
+        tag: this.tag
       }
       this.$store.dispatch('notes/' + types.NOTE_CREATE, payload)
     },
     /* update the note */
     updateNote () {
       // payload
-      let payload = {
-        'id': this.id,
-        'title': this.title,
-        'body': this.body,
-        'parent_id': this.parent_id,
-        'tag': this.tag,
-        'is_todo': (this.is_todo ? 1 : 0)
+      const payload = {
+        id: this.id,
+        title: this.title,
+        body: this.body,
+        parent_id: this.parent_id,
+        tag: this.tag,
+        is_todo: (this.is_todo ? 1 : 0)
       }
       // push the data
       this.$store.dispatch('notes/' + types.NOTE_CHANGE, payload)
@@ -261,7 +261,8 @@ export default {
           }
         })
         .catch(err => {
-          // console.log(err)
+          // eslint-disable-next-line no-console
+          console.log(err)
         })
     },
     /* delete action pressed */
@@ -287,19 +288,20 @@ export default {
     }, 300),
     ...mapActions(Object.keys(actions)),
     getImgBody () {
-      let re = /<img(.*)src=":\/(.*)"(.*)\/>/g
-      let result = re.exec(this.body)
+      const re = /<img(.*)src=":\/(.*)"(.*)\/>/g
+      const result = re.exec(this.body)
       if (result !== null) {
-        let resourceId = result[2]
+        const resourceId = result[2]
         let resourceFile = ''
         axios.get('/api/jw/resources/' + resourceId)
           .then((res) => {
-            resourceFile = resourceId + '.' + res.data['file_extension']
-            let replaceIt = '<img$1src="' + this.urlResources + '/' + resourceFile + '"$3/>'
+            resourceFile = resourceId + '.' + res.data.file_extension
+            const replaceIt = '<img$1src="' + this.urlResources + '/' + resourceFile + '"$3/>'
             this.body = this.body.replace(re, replaceIt)
           })
           .catch(error => {
-            //console.log(error.statusText)
+            // eslint-disable-next-line no-console
+            console.log(error.statusText)
           })
       }
     }
@@ -312,7 +314,7 @@ export default {
       if (this.$store.state.notes.note.body !== undefined) {
         body = this.$store.state.notes.note.body
       }
-      let re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
+      const re = /!\[(.*)\.(\w+)\]\(:\/(.*)\)/g
       body = body.replace(re, '![$1.$2](' + this.urlResources + '/$3.$2)')
       this.getImgBody()
       return md.render(body)
@@ -338,8 +340,8 @@ export default {
     }),
     tag: {
       get () {
-        let tags = []
-        for (let tag in this.$store.state.notes.tag) {
+        const tags = []
+        for (const tag in this.$store.state.notes.tag) {
           tags.push(this.$store.state.notes.tag[tag].id)
         }
         return tags

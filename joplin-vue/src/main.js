@@ -26,7 +26,7 @@ window.Cookies = require('js-cookie')
 // eslint-disable-next-line
 let csrftoken = Cookies.get('csrftoken')
 
-axios.defaults.headers.common['cookiename'] = 'csrftoken'
+axios.defaults.headers.common.cookiename = 'csrftoken'
 axios.defaults.headers.common['X-CSRFToken'] = csrftoken
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 

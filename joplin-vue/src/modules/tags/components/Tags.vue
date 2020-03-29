@@ -5,7 +5,7 @@
        :key="tag.id">
       <b-link :to="{ name: 'myTag', params: { id: tag.title } }"
           replace
-          v-slot="{ href, route, navigate, isActive, isExactActive }">
+          v-slot="{ href }">
         <a :href="href" @click="notesByTag(tag)">{{ tag.title }}</a>&nbsp;
         <b-badge pill varian='primary'>{{ tag.nb_notes }}</b-badge>
       </b-link>
