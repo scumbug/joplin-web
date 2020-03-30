@@ -5,7 +5,7 @@
       :key="folder.id">
       <b-link :to="{ name: 'myFolder', params: { id: folder.title } }"
           replace
-          v-slot="{ href, route, navigate, isActive, isExactActive }">
+          v-slot="{ href }">
         <a :href="href" @click="notesByFolder(folder)">{{ folder.title }}</a>&nbsp;
         <b-badge pill variant='primary'>{{ folder.nb_notes }}</b-badge>
       </b-link>
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     notesByFolder (folder) {
-      let tag = {}
+      const tag = {}
       this.$store.dispatch('folders/' + types.FOLDER_FETCH, folder)
       this.$store.dispatch('tags/' + typesTag.TAG_FETCH, tag)
       this.$store.dispatch('notes/' + typesNote.NOTE_FETCH_FOLDER, folder)

@@ -2,7 +2,7 @@
   <div>
     <b-link v-for="tag in parent_folder" :key="tag.id" :to="{ name: 'myTag', params: { id: tag.title } }"
         replace
-        v-slot="{ href, route, navigate, isActive, isExactActive }">
+        v-slot="{  }">
       <b-button :key="tag.id"
         variant="outline-success"
         size="sm"

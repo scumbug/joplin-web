@@ -10,7 +10,7 @@
         <b-navbar-nav>
           <b-link :to="{ path: '/home' }"
               replace
-              v-slot="{ href, route, navigate, isActive, isExactActive }">
+              v-slot="{ href }">
             <a :href="href" @click="getNotes()">Home</a>
           </b-link>
         </b-navbar-nav>
