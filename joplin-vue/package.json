@@ -1,7 +1,7 @@
 {
   "name": "joplin-vue",
   "description": "Joplin Editor",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "author": "FoxMaSk <fomask@protonmail.com>",
   "private": true,
   "scripts": {
