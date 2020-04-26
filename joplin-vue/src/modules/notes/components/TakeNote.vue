@@ -189,14 +189,11 @@ export default {
     doNote (e) {
       this.errors = []
 
-      if (this.title === '') {
-        this.errors.push('title required.')
-      }
       if (this.parent_id === undefined) {
         this.errors.push('folder required.')
       }
-      if (this.body === '') {
-        this.errors.push('body required.')
+      if (this.body === '' && this.title === '') {
+        this.errors.push('You need the fill the title or the body.')
       }
 
       if (!this.errors.length) {
