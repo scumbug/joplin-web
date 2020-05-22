@@ -12,7 +12,7 @@
         <div role="tablist">
           <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
-              <b-button block href="#" v-b-toggle.folders variant="info"><i class="fas fa-folder-open"></i>  Folders</b-button>
+              <b-button block v-b-toggle.folders variant="info"><i class="fas fa-folder-open"></i>  Folders</b-button>
             </b-card-header>
             <b-collapse id="folders" visible accordion="my-folders" role="tabpanel">
               <b-card-body>

@@ -2,6 +2,7 @@
 """
    joplin-web sauce starlette
 """
+import logging
 # starlette
 from starlette.applications import Starlette
 from starlette.config import Config
@@ -25,6 +26,10 @@ main_app = Starlette()
 main_app.debug = settings('JW_DEBUG', default=False)
 
 joplin = JoplinApi(token=settings('JOPLIN_WEBCLIPPER_TOKEN'))
+
+log_level = 'DEBUG' if main_app.debug else 'INFO'
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=log_level)
+logger = logging.getLogger("joplin_web.app")
 
 
 async def tags_to_string(my_tags):
@@ -56,13 +61,14 @@ async def tag_for_notes(data):
     :param data:
     :return:
     """
-    payload = []
+    data = []
     for note in data.json():
         tag = await joplin.get_notes_tags(note['id'])
         new_note = note
         new_note['tag'] = tag.json() if tag else ''
-        payload.append(new_note)
-    return payload
+        data.append(new_note)
+    logger.debug(data)
+    return data
 
 
 async def paginator(request, res):
@@ -99,6 +105,7 @@ async def paginator(request, res):
         if len(tags_list) > 0:
             line['tags'] = tags_list
         payload_with_tags.append(line)
+    logger.debug(payload_with_tags)
     return payload_with_tags
 
 """
@@ -125,6 +132,7 @@ async def nb_notes_by_folder(folders):
             children = await nb_notes_by_folder(folder['children'])
             item['children'] = children
         data.append(item)
+    logger.debug(data)
     return data
 
 
@@ -144,6 +152,7 @@ async def nb_notes_by_tag(tags):
         item = tag
         item['nb_notes'] = nb_notes
         data.append(item)
+    logger.debug(data)
     return data
 
 
@@ -155,6 +164,7 @@ async def get_folders(request):
     """
     res = await joplin.get_folders()
     data = await nb_notes_by_folder(res.json())
+    logger.debug(data)
     return JSONResponse(data)
 
 
@@ -165,8 +175,9 @@ async def get_notes(request):
     :return:
     """
     res = await joplin.get_notes()
-    payload = await tag_for_notes(res)
-    return JSONResponse(payload)
+    data = await tag_for_notes(res)
+    logger.debug(data)
+    return JSONResponse(data)
 
 
 async def get_tags(request):
@@ -177,6 +188,7 @@ async def get_tags(request):
     """
     res = await joplin.get_tags()
     data = await nb_notes_by_tag(res.json())
+    logger.debug(data)
     return JSONResponse(data)
 
 
@@ -188,8 +200,9 @@ async def get_notesbyfolder(request):
     """
     folder = request.path_params['folder']
     res = await joplin.get_folders_notes(folder)
-    payload = await tag_for_notes(res)
-    return JSONResponse(payload)
+    data = await tag_for_notes(res)
+    logger.debug(data)
+    return JSONResponse(data)
 
 
 async def get_notesbytag(request):
@@ -200,13 +213,14 @@ async def get_notesbytag(request):
     """
     tag_id = request.path_params['tag_id']
     res = await joplin.get_tags_notes(tag_id)
-    payload = []
+    data = []
     for note in res.json():
         tag = await joplin.get_notes_tags(note['id'])
         new_note = note
         new_note['tag'] = tag.json() if tag else ''
-        payload.append(new_note)
-    return JSONResponse(payload)
+        data.append(new_note)
+    logger.debug(data)
+    return JSONResponse(data)
 
 
 async def get_notes_tags(request):
@@ -217,6 +231,7 @@ async def get_notes_tags(request):
     """
     note_id = request.path_params['note_id']
     res = await joplin.get_notes_tags(note_id)
+    logger.debug(res)
     return JSONResponse(res.json())
 
 
@@ -228,6 +243,7 @@ async def get_resource(request):
     """
     resource_id = request.path_params['resource_id']
     res = await joplin.get_resource(resource_id)
+    logger.debug(res)
     return JSONResponse(res.json())
 
 
@@ -239,6 +255,7 @@ async def get_notes_resources(request):
     """
     note_id = request.path_params['note_id']
     res = await joplin.get_notes_resources(note_id)
+    logger.debug(res)
     return JSONResponse(res.json())
 
 """
@@ -253,6 +270,7 @@ async def create_notes(request):
     body = payload['body']
     parent_id = payload['parent_id']
     res = await joplin.create_note(title=title, body=body, parent_id=parent_id)
+    logger.debug(res)
     return JSONResponse(res.json())
 
 
@@ -265,8 +283,8 @@ async def update_note(request):
     parent_id = payload['parent_id']
     kwargs = {'is_todo': payload['is_todo'],
               'tags': await tags_to_string(payload['tag'])}
-    print(kwargs)
     res = await joplin.update_note(note_id=note_id, title=title, body=body, parent_id=parent_id, **kwargs)
+    logger.debug(res)
     return JSONResponse(res.json())
 
 
@@ -277,6 +295,7 @@ async def delete_note(request):
     data = {}
     if res.status_code == 200:
         data = {'MSG': 'OK'}
+    logger.debug(data)
     return JSONResponse(data)
 
 
@@ -284,6 +303,7 @@ async def delete_note(request):
 async def create_folder(request):
     folder = await request.json()
     res = await joplin.create_folder(folder=folder['title'])
+    logger.debug(res)
     return JSONResponse(res.json())
 
 
@@ -291,6 +311,7 @@ async def create_folder(request):
 async def create_tag(request):
     tag = await request.json()
     res = await joplin.create_tag(title=tag['title'])
+    logger.debug(res)
     return JSONResponse(res.json())
 
 
@@ -338,7 +359,6 @@ api = Router(routes=[
     ]))
 ])
 JW_BASE_URL = settings('JW_BASE_URL', default='/')
-print(JW_BASE_URL)
 # The Routes to static content and main page
 frontend = Router(routes=[
     Route('/', endpoint=home, methods=['GET']),
