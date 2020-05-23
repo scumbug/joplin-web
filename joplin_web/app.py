@@ -61,14 +61,14 @@ async def tag_for_notes(data):
     :param data:
     :return:
     """
-    data = []
+    payload = []
     for note in data.json():
         tag = await joplin.get_notes_tags(note['id'])
         new_note = note
         new_note['tag'] = tag.json() if tag else ''
-        data.append(new_note)
-    logger.debug(data)
-    return data
+        payload.append(new_note)
+    logger.debug(payload)
+    return payload
 
 
 async def paginator(request, res):
